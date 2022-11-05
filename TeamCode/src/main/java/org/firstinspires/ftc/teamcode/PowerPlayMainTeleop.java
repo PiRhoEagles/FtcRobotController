@@ -2,13 +2,14 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@TeleOp(name="Power Play Mecanum Drive", group="Linear Opmode")
+@TeleOp(name="Power Play Main Teleop", group="Linear Opmode")
 //@Disabled
-public class PowerPlayMecanumDrive extends LinearOpMode {
+public class PowerPlayMainTeleop extends LinearOpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
@@ -16,13 +17,15 @@ public class PowerPlayMecanumDrive extends LinearOpMode {
     private DcMotor motorFL = null;
     private DcMotor motorBL = null;
     private DcMotor motorBR = null;
+    private Servo servoGrabber = null;
 
     @Override
     public void runOpMode() {
+        // adds telemetry that the robot has been initialized
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
-        // Initialize the hardware variables
+        // initialize the motor hardware variables
         motorFR = hardwareMap.get(DcMotor.class, "FR");
         motorFL = hardwareMap.get(DcMotor.class, "FL");
         motorBL = hardwareMap.get(DcMotor.class, "BL");
@@ -35,6 +38,16 @@ public class PowerPlayMecanumDrive extends LinearOpMode {
 
         // the power of the motors are multiplied by this
         double motorPowerFactor = 0.6;
+
+        // initialize the grabber servo variable
+        servoGrabber = hardwareMap.get(Servo.class, "grabber");
+
+        // variable to store the position of the grabber servo
+        // lower value is more closed. min = 0.46, max = TODO
+        double position = 0.46;
+
+        // initalize servo position
+        servoGrabber.setPosition(position);
 
         // copies of the gamepad
         Gamepad currentGamepad1 = new Gamepad();
@@ -95,13 +108,16 @@ public class PowerPlayMecanumDrive extends LinearOpMode {
             double powerBR = ((y + x - rx) / denominator) * motorPowerFactor;
 
 
-            //----------SET MOTOR POWER----------
+            //----------SET MOTOR & SERVO POWER----------
 
             // Send calculated power to wheels
             motorFR.setPower(powerFR);
             motorFL.setPower(powerFL);
             motorBL.setPower(powerBL);
             motorBR.setPower(powerBR);
+
+            // Send calculated power to servo
+            servoGrabber.setPosition(position);
 
 
             //----------TELEMETRY----------
@@ -119,6 +135,8 @@ public class PowerPlayMecanumDrive extends LinearOpMode {
             telemetry.addData("FL", powerFL);
             telemetry.addData("BL", powerBL);
             telemetry.addData("BR", powerBR);
+
+            telemetry.addData("grabber", position);
 
             telemetry.update();
         }
