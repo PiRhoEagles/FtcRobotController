@@ -19,8 +19,18 @@ public class PowerPlayMainTeleop extends LinearOpMode {
     private DcMotor motorBR = null;
     private Servo servoGrabber = null;
 
+    // the power of the motors are multiplied by this
+    double motorPowerFactor = 0.6;
+
+    // the value of the grabber in its closed position
+    double grabClosed = 0.23;
+    // the value of the grabber in its open position
+    double grabOpen = grabClosed + 0.16;
+    // variable to store the position of the grabber servo; lower value is more closed
+    double grabPosition = grabOpen;
+
     @Override
-    public void runOpMode() {
+    public void runOpMode() { //---------------PRESSES INITIALIZE---------------
         // adds telemetry that the robot has been initialized
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -36,18 +46,11 @@ public class PowerPlayMainTeleop extends LinearOpMode {
         motorFL.setDirection(DcMotor.Direction.REVERSE);
         motorBL.setDirection(DcMotor.Direction.REVERSE);
 
-        // the power of the motors are multiplied by this
-        double motorPowerFactor = 0.6;
-
         // initialize the grabber servo variable
         servoGrabber = hardwareMap.get(Servo.class, "grabber");
 
-        // variable to store the position of the grabber servo
-        // lower value is more closed. min = 0.46, max = TODO
-        double position = 0.46;
-
-        // initalize servo position
-        servoGrabber.setPosition(position);
+        // initialize servo position
+        servoGrabber.setPosition(grabPosition);
 
         // copies of the gamepad
         Gamepad currentGamepad1 = new Gamepad();
@@ -58,7 +61,7 @@ public class PowerPlayMainTeleop extends LinearOpMode {
         runtime.reset();
 
         // run until the end of the match (driver presses STOP)
-        while (opModeIsActive()) {
+        while (opModeIsActive()) { //---------------PRESSES PLAY---------------
 
             //----------CALC motorPowerFactor----------
 
@@ -108,6 +111,18 @@ public class PowerPlayMainTeleop extends LinearOpMode {
             double powerBR = ((y + x - rx) / denominator) * motorPowerFactor;
 
 
+            //----------GRABBER CONTROLS----------
+
+            // rising edge detector for right_bumper
+            if (currentGamepad1.right_bumper && !previousGamepad1.right_bumper) {
+                if (grabPosition == grabOpen) {
+                    grabPosition = grabClosed;
+                } else {
+                    grabPosition = grabOpen;
+                }
+            }
+
+
             //----------SET MOTOR & SERVO POWER----------
 
             // Send calculated power to wheels
@@ -117,7 +132,7 @@ public class PowerPlayMainTeleop extends LinearOpMode {
             motorBR.setPower(powerBR);
 
             // Send calculated power to servo
-            servoGrabber.setPosition(position);
+            servoGrabber.setPosition(grabPosition);
 
 
             //----------TELEMETRY----------
@@ -136,7 +151,7 @@ public class PowerPlayMainTeleop extends LinearOpMode {
             telemetry.addData("BL", powerBL);
             telemetry.addData("BR", powerBR);
 
-            telemetry.addData("grabber", position);
+            telemetry.addData("grabber", grabPosition);
 
             telemetry.update();
         }
