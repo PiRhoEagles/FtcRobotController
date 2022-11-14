@@ -23,7 +23,7 @@ public class PowerPlayMainTeleop extends LinearOpMode {
     double motorPowerFactor = 0.6;
 
     // the value of the grabber in its closed position
-    double grabClosed = 0.23;
+    double grabClosed = 0.24;
     // the value of the grabber in its open position
     double grabOpen = grabClosed + 0.16;
     // variable to store the position of the grabber servo; lower value is more closed
