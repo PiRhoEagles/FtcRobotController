@@ -17,10 +17,23 @@ public class PowerPlayMainTeleop extends LinearOpMode {
     private DcMotor motorFL = null;
     private DcMotor motorBL = null;
     private DcMotor motorBR = null;
+    private DcMotor slideL = null;
+    private DcMotor slideR = null;
     private Servo servoGrabber = null;
 
     // the power of the motors are multiplied by this
     double motorPowerFactor = 0.6;
+
+    // the max power of the slides going up and down
+    double maxSlidePowerUp = 0.5;
+    double maxSlidePowerDown = 0.5;
+
+    // one rotation of encoder tics for the slide motors
+    double slideRotTics = 384.5;
+    // mm in one slide motor rotation
+    double mmPerSlideRotation = 116;
+    // number of tics for one cm
+    double slideTicsInCM = slideRotTics / (mmPerSlideRotation / 10);
 
     // the value of the grabber in its closed position
     double grabClosed = 0.24;
@@ -39,12 +52,26 @@ public class PowerPlayMainTeleop extends LinearOpMode {
         motorFR = hardwareMap.get(DcMotor.class, "FR");
         motorFL = hardwareMap.get(DcMotor.class, "FL");
         motorBL = hardwareMap.get(DcMotor.class, "BL");
-        motorBR = hardwareMap.get(DcMotor.class, " BR");
+        motorBR = hardwareMap.get(DcMotor.class, "BR");
+        slideL = hardwareMap.get(DcMotor.class, "slideL");
+        slideR = hardwareMap.get(DcMotor.class, "slideR");
 
         // Most robots need the motors on one side to be reversed to drive forward
         // Reverse the motors that runs backwards when connected directly to the battery
         motorFL.setDirection(DcMotor.Direction.REVERSE);
         motorBL.setDirection(DcMotor.Direction.REVERSE);
+        slideR.setDirection(DcMotor.Direction.REVERSE);
+
+        slideL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slideR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slideL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        slideR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        // use braking to slow the motors down faster
+        motorFR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motorFL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motorBL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motorBR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // initialize the grabber servo variable
         servoGrabber = hardwareMap.get(Servo.class, "grabber");
@@ -94,7 +121,8 @@ public class PowerPlayMainTeleop extends LinearOpMode {
                 motorPowerFactor = Math.max(motorPowerFactor - .1, 0.1);
             }
 
-            //----------CALC MOTOR POWER----------
+
+            //----------CALC DRIVE MOTOR POWER----------
 
             // joystick values used to determine drive movement
             double y = -gamepad1.left_stick_y; // Remember, this is reversed!
@@ -111,10 +139,30 @@ public class PowerPlayMainTeleop extends LinearOpMode {
             double powerBR = ((y + x - rx) / denominator) * motorPowerFactor;
 
 
+            //----------SLIDE CONTROLS----------
+
+            // decides power of the slides
+            if (currentGamepad1.right_bumper && !previousGamepad1.right_bumper) {
+                slideL.setTargetPosition((int)(3 * slideTicsInCM));
+                slideR.setTargetPosition((int)(3 * slideTicsInCM));
+                slideL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                slideR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                slideL.setPower(maxSlidePowerUp);
+                slideR.setPower(maxSlidePowerUp);
+            } else if (currentGamepad1.left_bumper && !previousGamepad1.left_bumper) {
+                slideL.setTargetPosition(0);
+                slideR.setTargetPosition(0);
+                slideL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                slideR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                slideL.setPower(maxSlidePowerDown);
+                slideR.setPower(maxSlidePowerDown);
+            }
+
+
             //----------GRABBER CONTROLS----------
 
-            // rising edge detector for right_bumper
-            if (currentGamepad1.right_bumper && !previousGamepad1.right_bumper) {
+            // rising edge detector for grabber position
+            if (currentGamepad1.a && !previousGamepad1.a) {
                 if (grabPosition == grabOpen) {
                     grabPosition = grabClosed;
                 } else {
@@ -130,6 +178,8 @@ public class PowerPlayMainTeleop extends LinearOpMode {
             motorFL.setPower(powerFL);
             motorBL.setPower(powerBL);
             motorBR.setPower(powerBR);
+            //slideL.setPower(powerSlides);
+            //slideR.setPower(powerSlides);
 
             // Send calculated power to servo
             servoGrabber.setPosition(grabPosition);
@@ -139,20 +189,10 @@ public class PowerPlayMainTeleop extends LinearOpMode {
 
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
-
             telemetry.addData("motorPowerFactor", motorPowerFactor);
-
-            telemetry.addData("LeftX", gamepad1.left_stick_x);
-            telemetry.addData("LeftY", -gamepad1.left_stick_y);
-            telemetry.addData("RightX", gamepad1.right_stick_x);
-
-            telemetry.addData("FR ", powerFR);
-            telemetry.addData("FL", powerFL);
-            telemetry.addData("BL", powerBL);
-            telemetry.addData("BR", powerBR);
-
-            telemetry.addData("grabber", grabPosition);
-
+            telemetry.addData("grabPosition", grabPosition);
+            telemetry.addData("slideL position", slideL.getCurrentPosition());
+            telemetry.addData("slideR position", slideR.getCurrentPosition());
             telemetry.update();
         }
     }
