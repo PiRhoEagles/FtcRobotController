@@ -19,16 +19,13 @@ public class PowerPlayMainTeleop extends LinearOpMode {
     private DcMotor motorBR = null;
     private DcMotor slideL = null;
     private DcMotor slideR = null;
-    private Servo servoGrabber = null;
+    private Servo grabberL = null;
+    private Servo grabberR = null;
 
 
     // the power of the motors are multiplied by this
     double motorPowerFactor = 0.6;
 
-
-    // the max power of the slides going up and down
-    static final double MAX_SLIDE_POWER_UP = 0.7;
-    static final double MAX_SLIDE_POWER_DOWN = 0.5;
 
     // how many encoder tics make one full slide motor rotation
     static final double SLIDE_TICS_IN_ROT = 384.5;
@@ -40,13 +37,8 @@ public class PowerPlayMainTeleop extends LinearOpMode {
     // the slide's level; 0-3, 0 being ground, 3 being highest pole
     int slideLvl = 0;
 
-
-    // the value of the grabber in its closed position
-    static final double GRAB_CLOSED = 0.24;
-    // the value of the grabber in its open position
-    static final double GRAB_OPEN = GRAB_CLOSED + 0.16;
-    // variable to store the position of the grabber servo; lower value is more closed
-    double grabPosition = GRAB_OPEN;
+    // whether or not the grabber is open
+    boolean grabberOpen = true;
 
 
     // copies of the gamepad
@@ -60,7 +52,8 @@ public class PowerPlayMainTeleop extends LinearOpMode {
         initMotorsAndServos();
 
         // initialize servo position
-        servoGrabber.setPosition(grabPosition);
+        grabberL.setPosition(0.5);
+        grabberR.setPosition(0.5);
 
         // adds telemetry that the robot has been initialized
         telemetry.addData("Status", "Initialized");
@@ -92,23 +85,6 @@ public class PowerPlayMainTeleop extends LinearOpMode {
         }
     }
 
-    // makes copies of the gamepad
-    public void copyGamepad() {
-        try {
-            // Store the gamepad values from the previous loop iteration in
-            // previousGamepad1 to be used in this loop iteration
-            previousGamepad1.copy(currentGamepad1);
-
-            // Store the gamepad values from this loop iteration in
-            // currentGamepad1 to be used for the entirety of this loop iteration
-            currentGamepad1.copy(gamepad1);
-        }
-        catch (com.qualcomm.robotcore.exception.RobotCoreException e) {
-            // Swallow the possible exception, it should not happen as
-            // currentGamepad1 are being copied from valid Gamepads
-        }
-    }
-
     // initialize the motors and servos
     public void initMotorsAndServos() {
         // initialize the motor hardware variables
@@ -135,8 +111,26 @@ public class PowerPlayMainTeleop extends LinearOpMode {
         slideL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         slideR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        // initialize the grabber servo variable
-        servoGrabber = hardwareMap.get(Servo.class, "grabber");
+        // initialize the grabber servos variable
+        grabberL = hardwareMap.get(Servo.class, "grabberL");
+        grabberR = hardwareMap.get(Servo.class, "grabberR");
+    }
+
+    // makes copies of the gamepad
+    public void copyGamepad() {
+        try {
+            // Store the gamepad values from the previous loop iteration in
+            // previousGamepad1 to be used in this loop iteration
+            previousGamepad1.copy(currentGamepad1);
+
+            // Store the gamepad values from this loop iteration in
+            // currentGamepad1 to be used for the entirety of this loop iteration
+            currentGamepad1.copy(gamepad1);
+        }
+        catch (com.qualcomm.robotcore.exception.RobotCoreException e) {
+            // Swallow the possible exception, it should not happen as
+            // currentGamepad1 are being copied from valid Gamepads
+        }
     }
 
     // calculates/updates motorPowerFactor
@@ -178,50 +172,49 @@ public class PowerPlayMainTeleop extends LinearOpMode {
     // updates the grabber position
     public void updateGrabber() {
         // rising edge detector for grabber position
-        if (currentGamepad1.a && !previousGamepad1.a) {
-            if (grabPosition == GRAB_OPEN) {
-                grabPosition = GRAB_CLOSED;
+        if (currentGamepad1.right_bumper && !previousGamepad1.right_bumper) {
+            if (grabberOpen) {
+                grabberOpen = false;
+                // pickup the cone
+                grabberL.setPosition(0.2);
+                grabberR.setPosition(0.8);
             } else {
-                grabPosition = GRAB_OPEN;
+                grabberOpen = true;
+                // drop the cone
+                grabberL.setPosition(0.5);
+                grabberR.setPosition(0.5);
+                
             }
         }
-
-        // Send calculated power to servo
-        servoGrabber.setPosition(grabPosition);
     }
 
     // move the slides a number of cm
-    public void moveSlidesToLvl(double newSlideLvl) {
-        if (slideLvl < newSlideLvl) {
-            // runs if the slides are going to move up
+    public void moveSlidesToLvl(int newSlideLvl) {
+        int newHeight = (int)(newSlideLvl * 28 * SLIDE_TICS_IN_CM);
 
-            // moves the slides to the desired position
-            slideL.setTargetPosition((int)(newSlideLvl * 5 * SLIDE_TICS_IN_CM));
-            slideR.setTargetPosition((int)(newSlideLvl * 5 * SLIDE_TICS_IN_CM));
-            slideL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            slideR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            slideL.setPower(MAX_SLIDE_POWER_UP);
-            slideR.setPower(MAX_SLIDE_POWER_UP);
-        } else if (slideLvl > newSlideLvl) {
-            // runs if the slides are going to move down
+        // moves the slides to the desired position
+        slideL.setTargetPosition(newHeight);
+        slideR.setTargetPosition(newHeight);
+        slideL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        slideR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        slideL.setPower(1);
+        slideR.setPower(1);
 
-            // moves the slides to the desired position
-            slideL.setTargetPosition((int)(newSlideLvl * 5 * SLIDE_TICS_IN_CM));
-            slideR.setTargetPosition((int)(newSlideLvl * 5 * SLIDE_TICS_IN_CM));
-            slideL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            slideR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            slideL.setPower(MAX_SLIDE_POWER_DOWN);
-            slideR.setPower(MAX_SLIDE_POWER_DOWN);
-        }
+        // set the slideLvl to be what the slides have just moved to
+        slideLvl = newSlideLvl;
     }
 
     // updates the slides level
     public void updateSlidesLvl() {
         // decides power of the slides
-        if (currentGamepad1.right_bumper && !previousGamepad1.right_bumper) {
-            moveSlidesToLvl(1);
-        } else if (currentGamepad1.left_bumper && !previousGamepad1.left_bumper) {
+        if (currentGamepad1.a && !previousGamepad1.a) {
             moveSlidesToLvl(0);
+        } else if (currentGamepad1.b && !previousGamepad1.b) {
+            moveSlidesToLvl(1);
+        } else if (currentGamepad1.y && !previousGamepad1.y) {
+            moveSlidesToLvl(2);
+        } else if (currentGamepad1.x && !previousGamepad1.x) {
+            moveSlidesToLvl(3);
         }
     }
 
@@ -229,7 +222,8 @@ public class PowerPlayMainTeleop extends LinearOpMode {
     public void doTelem() {
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.addData("motorPowerFactor", motorPowerFactor);
-        telemetry.addData("grabPosition", grabPosition);
+        telemetry.addData("grabberOpen", grabberOpen);
+        telemetry.addData("slideLvl", slideLvl);
         telemetry.addData("slideL position", slideL.getCurrentPosition());
         telemetry.addData("slideR position", slideR.getCurrentPosition());
         telemetry.update();
