@@ -183,7 +183,6 @@ public class PowerPlayMainTeleop extends LinearOpMode {
                 // drop the cone
                 grabberL.setPosition(0.5);
                 grabberR.setPosition(0.5);
-                
             }
         }
     }
