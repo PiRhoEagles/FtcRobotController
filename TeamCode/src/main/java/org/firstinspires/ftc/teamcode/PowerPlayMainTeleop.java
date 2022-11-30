@@ -37,9 +37,6 @@ public class PowerPlayMainTeleop extends LinearOpMode {
     // the slide's level; 0-3, 0 being ground, 3 being highest pole
     int slideLvl = 0;
 
-    // whether or not the grabber is open
-    boolean grabberOpen = true;
-
 
     // copies of the gamepad
     Gamepad currentGamepad1 = new Gamepad();
@@ -51,10 +48,6 @@ public class PowerPlayMainTeleop extends LinearOpMode {
         // initialize the motors and servos
         initMotorsAndServos();
 
-        // initialize servo position
-        grabberL.setPosition(0.5);
-        grabberR.setPosition(0.5);
-
         // adds telemetry that the robot has been initialized
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -64,6 +57,10 @@ public class PowerPlayMainTeleop extends LinearOpMode {
 
         // resets the runtime
         runtime.reset();
+
+        // enables pwm for the grabber servos
+        grabberL.getController().pwmEnable();
+        grabberR.getController().pwmEnable();
 
         // runs until the end of the match (driver presses STOP)
         while (opModeIsActive()) { //---------------PRESSES PLAY---------------
@@ -171,19 +168,26 @@ public class PowerPlayMainTeleop extends LinearOpMode {
 
     // updates the grabber position
     public void updateGrabber() {
-        // rising edge detector for grabber position
-        if (currentGamepad1.right_bumper && !previousGamepad1.right_bumper) {
-            if (grabberOpen) {
-                grabberOpen = false;
-                // pickup the cone
-                grabberL.setPosition(0.2);
-                grabberR.setPosition(0.8);
-            } else {
-                grabberOpen = true;
-                // drop the cone
-                grabberL.setPosition(0.5);
-                grabberR.setPosition(0.5);
-            }
+        if (currentGamepad1.right_bumper && !currentGamepad1.left_bumper) {
+            // makes the wheels spin inward
+            grabberL.setPosition(-10);
+            grabberR.setPosition(10);
+
+            // starts the wheels moving
+            grabberL.getController().pwmEnable();
+            grabberR.getController().pwmEnable();
+        } else if (currentGamepad1.left_bumper && !currentGamepad1.right_bumper) {
+            // makes the wheels spin outward
+            grabberL.setPosition(10);
+            grabberR.setPosition(-10);
+
+            // starts the wheels moving
+            grabberL.getController().pwmEnable();
+            grabberR.getController().pwmEnable();
+        } else {
+            // stops the wheels from turning
+            grabberL.getController().pwmDisable();
+            grabberR.getController().pwmDisable();
         }
     }
 
@@ -221,7 +225,6 @@ public class PowerPlayMainTeleop extends LinearOpMode {
     public void doTelem() {
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.addData("motorPowerFactor", motorPowerFactor);
-        telemetry.addData("grabberOpen", grabberOpen);
         telemetry.addData("slideLvl", slideLvl);
         telemetry.addData("slideL position", slideL.getCurrentPosition());
         telemetry.addData("slideR position", slideR.getCurrentPosition());

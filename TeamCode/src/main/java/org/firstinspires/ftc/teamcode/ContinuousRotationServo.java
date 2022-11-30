@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -9,6 +10,7 @@ import com.qualcomm.robotcore.util.Range;
 
 
 @TeleOp(name="Continuous Servo Test", group="Linear Opmode")
+@Disabled
 public class ContinuousRotationServo extends LinearOpMode {
 
     // Declare OpMode members.
@@ -18,11 +20,9 @@ public class ContinuousRotationServo extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+        // maps the grabber servos
         grabberL = hardwareMap.get(Servo.class, "grabberL");
         grabberR = hardwareMap.get(Servo.class, "grabberR");
-
-        grabberL.getController().pwmEnable();
-        grabberR.getController().pwmEnable();
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -31,9 +31,18 @@ public class ContinuousRotationServo extends LinearOpMode {
         waitForStart();
         runtime.reset();
 
+        // enables pwm for the grabber servos
+        // make sure this is after the driver presses play, otherwise
+        // the servos will begin spinning after init and not play
+        grabberL.getController().pwmEnable();
+        grabberR.getController().pwmEnable();
+
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
+            // negative makes it spin backwards, positive is forwards
+            // not sure what the magnitude of the value does because for any
+            // magnitude it always spins the same speed
             grabberL.setPosition(-10);
             grabberR.setPosition(10);
 
