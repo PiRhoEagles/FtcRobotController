@@ -193,15 +193,31 @@ public class PowerPlayMainTeleop extends LinearOpMode {
 
     // move the slides a number of cm
     public void moveSlidesToLvl(int newSlideLvl) {
-        int newHeight = (int)(newSlideLvl * 28 * SLIDE_TICS_IN_CM);
+        int newHeight = 0;
+
+        if (newSlideLvl == 1) {
+            newHeight = (int)(36 * SLIDE_TICS_IN_CM);
+        } else if (newSlideLvl == 2) {
+            newHeight = (int)(62 * SLIDE_TICS_IN_CM);
+        } else if (newSlideLvl == 3) {
+            newHeight = (int)(86 * SLIDE_TICS_IN_CM);
+        }
 
         // moves the slides to the desired position
         slideL.setTargetPosition(newHeight);
         slideR.setTargetPosition(newHeight);
         slideL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         slideR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        slideL.setPower(1);
-        slideR.setPower(1);
+
+        if (newSlideLvl < slideLvl) {
+            // if the slides are moving downward...
+            slideL.setPower(0.7);
+            slideR.setPower(0.7);
+        } else {
+            // if the slides are moving upward or are the same level...
+            slideL.setPower(1);
+            slideR.setPower(1);
+        }
 
         // set the slideLvl to be what the slides have just moved to
         slideLvl = newSlideLvl;
