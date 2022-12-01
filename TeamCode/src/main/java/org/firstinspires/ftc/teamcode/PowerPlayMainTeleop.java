@@ -145,10 +145,26 @@ public class PowerPlayMainTeleop extends LinearOpMode {
 
     // calculates and updates the power of the drive motors
     public void updateDriveMotors() {
+        // gamepad inputs
+        double lsy = -gamepad1.left_stick_y; // Remember, this is reversed!
+        double lsx = gamepad1.left_stick_x;
+        double rsx = gamepad1.right_stick_x;
+
+        // gets the signs of the stick values
+        double lsySign = lsy / Math.abs(lsy);
+        double lsxSign = lsx / Math.abs(lsx);
+        double rsxSign = rsx / Math.abs(rsx);
+
+        // ensures the stick value signs aren't NaN
+        if (Double.isNaN(lsySign)) {lsySign = 0;}
+        if (Double.isNaN(lsxSign)) {lsxSign = 0;}
+        if (Double.isNaN(rsxSign)) {rsxSign = 0;}
+
         // joystick values used to determine drive movement
-        double y = -gamepad1.left_stick_y; // Remember, this is reversed!
-        double x = gamepad1.left_stick_x;
-        double rx = gamepad1.right_stick_x;
+        // they're squared to allow for finer control at low speeds
+        double y = Math.pow(lsy, 2) * lsySign;
+        double x = Math.pow(lsx, 2) * lsxSign;
+        double rx = Math.pow(rsx, 2) * rsxSign;
 
         // Denominator is the largest motor power (absolute value) or 1
         // This ensures all the powers maintain the same ratio, but only when
@@ -164,6 +180,15 @@ public class PowerPlayMainTeleop extends LinearOpMode {
         motorFL.setPower(powerFL);
         motorBL.setPower(powerBL);
         motorBR.setPower(powerBR);
+
+        telemetry.addData("powerFR", powerFR);
+        telemetry.addData("powerFL", powerFL);
+        telemetry.addData("powerBL", powerBL);
+        telemetry.addData("powerBR", powerBR);
+
+        telemetry.addData("y", y);
+        telemetry.addData("x", x);
+        telemetry.addData("rx", rx);
     }
 
     // updates the grabber position
