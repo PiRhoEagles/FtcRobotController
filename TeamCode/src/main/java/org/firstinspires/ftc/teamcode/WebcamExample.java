@@ -1,12 +1,12 @@
 package org.firstinspires.ftc.teamcode;
 
-import static org.firstinspires.ftc.teamcode.pipelines.StickyNotesAndStaplerDetectionPipeline.detectionStates.ONE;
+import static org.firstinspires.ftc.teamcode.pipelines.PowerPlayBlueSidePipeline.detectionStates.ONE;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.pipelines.StickyNotesAndStaplerDetectionPipeline;
+import org.firstinspires.ftc.teamcode.pipelines.PowerPlayBlueSidePipeline;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
@@ -23,7 +23,7 @@ public class WebcamExample extends LinearOpMode
     // the webcam
     OpenCvWebcam webcam;
     // the pipeline
-    StickyNotesAndStaplerDetectionPipeline pipeline = new StickyNotesAndStaplerDetectionPipeline(telemetry);
+    PowerPlayBlueSidePipeline pipeline = new PowerPlayBlueSidePipeline(telemetry);
 
     @Override
     public void runOpMode()
@@ -102,7 +102,7 @@ public class WebcamExample extends LinearOpMode
          */
 
         // sets the current state to ONE
-        StickyNotesAndStaplerDetectionPipeline.detectionStates state = ONE;
+        PowerPlayBlueSidePipeline.detectionStates state = ONE;
 
         // repeatedly detects the state until play is hit
         while (!opModeIsActive() && !isStopRequested()) {
