@@ -68,9 +68,12 @@ public class PowerPlayBlueSidePipeline extends OpenCvPipeline {
     Rect boundingBox2 = new Rect();
     Rect boundingBox3 = new Rect();
 
+    // and empty mat
+    Mat EMPTY_MAT = new Mat();
 
-    // an array of the matrices to release
-    private ArrayList<Mat> matsToRelease = new ArrayList<>();
+    // color of the bounding boxes
+    Scalar BOUNDING_BOX_COLOR = new Scalar(255, 255, 255);
+
 
     // finds and then returns the largest contour
     public MatOfPoint findLargestContour(ArrayList <MatOfPoint> detectedCountours) {
@@ -103,23 +106,24 @@ public class PowerPlayBlueSidePipeline extends OpenCvPipeline {
 
     @Override
     public Mat processFrame(Mat input) {
-        // input is the webcam image
+        // input is the webcam image.
 
-        // empties some variables
-        colorShiftedIMG = new Mat();
-        mask1 = new Mat();
-        mask2 = new Mat();
-        mask3 = new Mat();
+        // Empties some variables.
+        // Some variables don't need to be emptied.
+        //colorShiftedIMG = new Mat();
+        //mask1 = new Mat();
+        //mask2 = new Mat();
+        //mask3 = new Mat();
         detectedContours1 = new ArrayList<>();
         detectedContours2 = new ArrayList<>();
         detectedContours3 = new ArrayList<>();
-        biggestContour1 = new MatOfPoint();
-        biggestContour2 = new MatOfPoint();
-        biggestContour3 = new MatOfPoint();
-        boundingBox1 = new Rect();
-        boundingBox2 = new Rect();
-        boundingBox3 = new Rect();
-        sum = new Mat();
+        //biggestContour1 = new MatOfPoint();
+        //biggestContour2 = new MatOfPoint();
+        //biggestContour3 = new MatOfPoint();
+        //boundingBox1 = new Rect();
+        //boundingBox2 = new Rect();
+        //boundingBox3 = new Rect();
+        //sum = new Mat();
 
         // converts the image's color from RGB to another color space
         Imgproc.cvtColor(input, colorShiftedIMG, Imgproc.COLOR_RGB2BGR);
@@ -134,9 +138,9 @@ public class PowerPlayBlueSidePipeline extends OpenCvPipeline {
         Core.inRange(colorShiftedIMG, lowerBound3, upperBound3, mask3);
 
         // detects the contours in mask{num} and stores them in the array detectedContours{num}
-        Imgproc.findContours(mask1,detectedContours1,new Mat(), Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_NONE);
-        Imgproc.findContours(mask2,detectedContours2,new Mat(), Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_NONE);
-        Imgproc.findContours(mask3,detectedContours3,new Mat(), Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_NONE);
+        Imgproc.findContours(mask1,detectedContours1, EMPTY_MAT, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_NONE);
+        Imgproc.findContours(mask2,detectedContours2, EMPTY_MAT, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_NONE);
+        Imgproc.findContours(mask3,detectedContours3, EMPTY_MAT, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_NONE);
 
         // finds and stores the biggest contour in each detectedContours
         biggestContour1 = findLargestContour(detectedContours1);
@@ -153,9 +157,9 @@ public class PowerPlayBlueSidePipeline extends OpenCvPipeline {
         Core.add(sum, mask3, sum);
 
         // draws each bounding box on sum
-        Imgproc.rectangle(sum, boundingBox1, new Scalar(255, 255, 255));
-        Imgproc.rectangle(sum, boundingBox2, new Scalar(255, 255, 255));
-        Imgproc.rectangle(sum, boundingBox3, new Scalar(255, 255, 255));
+        Imgproc.rectangle(sum, boundingBox1, BOUNDING_BOX_COLOR);
+        Imgproc.rectangle(sum, boundingBox2, BOUNDING_BOX_COLOR);
+        Imgproc.rectangle(sum, boundingBox3, BOUNDING_BOX_COLOR);
 
         // resets the state to be ONE
         state = detectionStates.ONE;
