@@ -72,7 +72,7 @@ public class PowerPlayMainTeleop extends LinearOpMode {
             updateDriveMotors();
 
             // updates the grabber
-            updateGrabber();
+            updateGrabberServoMode();
 
             // updates the slides level
             updateSlidesLvl();
@@ -191,8 +191,35 @@ public class PowerPlayMainTeleop extends LinearOpMode {
         telemetry.addData("rx", rx);
     }
 
-    // updates the grabber position
-    public void updateGrabber() {
+    // updates the grabber position if in regular servo mode
+    public void updateGrabberServoMode() {
+        // Rising edge detector for right bumper.
+        // This moves to the closed position.
+        if (currentGamepad1.right_bumper && !previousGamepad1.right_bumper) {
+            grabberL.setPosition(0.3);
+            grabberR.setPosition(0.75);
+        }
+
+        // Rising edge detector for left bumper.
+        // This moves to the open position.
+        if (currentGamepad1.left_bumper && !previousGamepad1.left_bumper) {
+            grabberL.setPosition(0.41);
+            grabberR.setPosition(0.62);
+        }
+
+        // TODO: REMOVE EVERYTHING BELOW THIS
+        if (currentGamepad1.dpad_left && !previousGamepad1.dpad_left) {
+            grabberL.setPosition(grabberL.getPosition() - 0.05);
+            grabberR.setPosition(grabberR.getPosition() + 0.05);
+        }
+        if (currentGamepad1.dpad_right && !previousGamepad1.dpad_right) {
+            grabberL.setPosition(grabberL.getPosition() + 0.05);
+            grabberR.setPosition(grabberR.getPosition() - 0.05);
+        }
+    }
+
+    // updates the grabber position if in continuous rotation mode
+    public void updateGrabberContinuousMode() {
         if (currentGamepad1.right_bumper && !currentGamepad1.left_bumper) {
             // makes the wheels spin inward
             grabberL.setPosition(-10);
@@ -269,6 +296,8 @@ public class PowerPlayMainTeleop extends LinearOpMode {
         telemetry.addData("slideLvl", slideLvl);
         telemetry.addData("slideL position", slideL.getCurrentPosition());
         telemetry.addData("slideR position", slideR.getCurrentPosition());
+        telemetry.addData("grabberL Position", grabberL.getPosition());
+        telemetry.addData("grabberR Position", grabberR.getPosition());
         telemetry.update();
     }
 }

@@ -24,8 +24,51 @@ public class PowerPlayBlueSideAuto extends LinearOpMode {
     // the pipeline
     PowerPlayBlueSidePipeline pipeline = new PowerPlayBlueSidePipeline(telemetry);
 
+
     @Override
-    public void runOpMode() {
+    public void runOpMode() { //---------------PRESSES INITIALIZE---------------
+        // Initializes the camera stuff.
+        initCameraStuff();
+
+        // Initializes the state variable.
+        PowerPlayBlueSidePipeline.detectionStates state = ONE;
+
+        // Repeatedly detects the state until play is hit.
+        // If this runs, init has already been hit, so it'll
+        // run until the play button is hit.
+        while (!opModeIsActive() && !isStopRequested()) {
+            state = pipeline.getState();
+            telemetry.addData("Detected State", state);
+            telemetry.update();
+        }
+
+        // Just skips right over since play has already been hit.
+        waitForStart();
+
+        // Stops streaming the webcam since we don't need it anymore.
+        // This also stops calling the pipeline.
+        webcam.stopStreaming();
+
+        while (opModeIsActive()) { //---------------MAIN LOOP AFTER PLAY---------------
+            // Send telemetry things.
+            telemetry.addData("Detected State", state);
+            telemetry.addData("Frame Count", webcam.getFrameCount());
+            telemetry.addData("FPS", String.format("%.2f", webcam.getFps()));
+            telemetry.addData("Total frame time ms", webcam.getTotalFrameTimeMs());
+            telemetry.addData("Pipeline time ms", webcam.getPipelineTimeMs());
+            telemetry.addData("Overhead time ms", webcam.getOverheadTimeMs());
+            telemetry.addData("Theoretical max FPS", webcam.getCurrentPipelineMaxFps());
+            telemetry.update();
+
+
+            // Throttle ourselves to 10Hz loop to avoid burning excess CPU cycles for no reason.
+            // In a real OpMode you might not want to do this.
+            sleep(100);
+        }
+    }
+
+    // Initializes the camera stuff.
+    public void initCameraStuff() {
         // Instantiate an OpenCvCamera object for the camera we'll be using.
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
@@ -47,44 +90,5 @@ public class PowerPlayBlueSideAuto extends LinearOpMode {
                 // This will be called if the camera could not be opened.
             }
         });
-
-        telemetry.addLine("Waiting for start");
-        telemetry.update();
-
-        // Initializes the state variable.
-        PowerPlayBlueSidePipeline.detectionStates state = ONE;
-
-        // Repeatedly detects the state until play is hit.
-        // If this runs, init has already been hit, so it'll
-        // run until the play button is hit.
-        while (!opModeIsActive() && !isStopRequested()) {
-            state = pipeline.getState();
-            telemetry.addData("Detected State", state);
-            telemetry.update();
-        }
-
-        // Just skips right over since play has already been hit.
-        waitForStart();
-
-        // Stops streaming the webcam since we don't need it anymore.
-        // This also stops calling the pipeline.
-        webcam.stopStreaming();
-
-        while (opModeIsActive()) {
-            // Send telemetry things.
-            telemetry.addData("Detected State", state);
-            telemetry.addData("Frame Count", webcam.getFrameCount());
-            telemetry.addData("FPS", String.format("%.2f", webcam.getFps()));
-            telemetry.addData("Total frame time ms", webcam.getTotalFrameTimeMs());
-            telemetry.addData("Pipeline time ms", webcam.getPipelineTimeMs());
-            telemetry.addData("Overhead time ms", webcam.getOverheadTimeMs());
-            telemetry.addData("Theoretical max FPS", webcam.getCurrentPipelineMaxFps());
-            telemetry.update();
-
-
-            // Throttle ourselves to 10Hz loop to avoid burning excess CPU cycles for no reason.
-            // In a real OpMode you might not want to do this.
-            sleep(100);
-        }
     }
 }
