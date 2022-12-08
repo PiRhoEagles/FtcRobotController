@@ -196,7 +196,7 @@ public class PowerPlayMainTeleop extends LinearOpMode {
         // Rising edge detector for right bumper.
         // This moves to the closed position.
         if (currentGamepad1.right_bumper && !previousGamepad1.right_bumper) {
-            grabberL.setPosition(0.3);
+            grabberL.setPosition(0.28);
             grabberR.setPosition(0.75);
         }
 
@@ -204,17 +204,7 @@ public class PowerPlayMainTeleop extends LinearOpMode {
         // This moves to the open position.
         if (currentGamepad1.left_bumper && !previousGamepad1.left_bumper) {
             grabberL.setPosition(0.41);
-            grabberR.setPosition(0.62);
-        }
-
-        // TODO: REMOVE EVERYTHING BELOW THIS
-        if (currentGamepad1.dpad_left && !previousGamepad1.dpad_left) {
-            grabberL.setPosition(grabberL.getPosition() - 0.05);
-            grabberR.setPosition(grabberR.getPosition() + 0.05);
-        }
-        if (currentGamepad1.dpad_right && !previousGamepad1.dpad_right) {
-            grabberL.setPosition(grabberL.getPosition() + 0.05);
-            grabberR.setPosition(grabberR.getPosition() - 0.05);
+            grabberR.setPosition(0.63);
         }
     }
 
@@ -252,7 +242,7 @@ public class PowerPlayMainTeleop extends LinearOpMode {
         } else if (newSlideLvl == 2) {
             newHeight = (int)(62 * SLIDE_TICS_IN_CM);
         } else if (newSlideLvl == 3) {
-            newHeight = (int)(86 * SLIDE_TICS_IN_CM);
+            newHeight = (int)(87 * SLIDE_TICS_IN_CM);
         }
 
         // moves the slides to the desired position
