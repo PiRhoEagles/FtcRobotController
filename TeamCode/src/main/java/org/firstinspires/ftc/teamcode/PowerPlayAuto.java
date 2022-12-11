@@ -161,7 +161,7 @@ public class PowerPlayAuto extends LinearOpMode {
         motorBL.setPower(0.5);
         motorBR.setPower(-0.5);
 
-        sleep(1400);
+        sleep(1000); // previously 1400
 
         // Move forward.
         motorFR.setPower(0.5);
@@ -169,7 +169,7 @@ public class PowerPlayAuto extends LinearOpMode {
         motorBL.setPower(0.5);
         motorBR.setPower(0.5);
 
-        sleep(1000);
+        sleep(800); // previously 1000
 
         motorFR.setPower(0);
         motorFL.setPower(0);
@@ -185,7 +185,7 @@ public class PowerPlayAuto extends LinearOpMode {
         motorBL.setPower(0.5);
         motorBR.setPower(0.5);
 
-        sleep(1100);
+        sleep(900); // previously 1100
 
         motorFR.setPower(0);
         motorFL.setPower(0);
@@ -209,7 +209,7 @@ public class PowerPlayAuto extends LinearOpMode {
         motorBL.setPower(-0.5);
         motorBR.setPower(0.5);
 
-        sleep(1400);
+        sleep(1000); // previously 1400
 
         // Move forward.
         motorFR.setPower(0.5);
@@ -217,7 +217,7 @@ public class PowerPlayAuto extends LinearOpMode {
         motorBL.setPower(0.5);
         motorBR.setPower(0.5);
 
-        sleep(1000);
+        sleep(800); // previously 1000
 
         motorFR.setPower(0);
         motorFL.setPower(0);

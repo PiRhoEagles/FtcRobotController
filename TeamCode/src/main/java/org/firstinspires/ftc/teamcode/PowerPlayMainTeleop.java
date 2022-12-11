@@ -181,14 +181,14 @@ public class PowerPlayMainTeleop extends LinearOpMode {
         motorBL.setPower(powerBL);
         motorBR.setPower(powerBR);
 
-        telemetry.addData("powerFR", powerFR);
-        telemetry.addData("powerFL", powerFL);
-        telemetry.addData("powerBL", powerBL);
-        telemetry.addData("powerBR", powerBR);
+        //telemetry.addData("powerFR", powerFR);
+        //telemetry.addData("powerFL", powerFL);
+        //telemetry.addData("powerBL", powerBL);
+        //telemetry.addData("powerBR", powerBR);
 
-        telemetry.addData("y", y);
-        telemetry.addData("x", x);
-        telemetry.addData("rx", rx);
+        //telemetry.addData("y", y);
+        //telemetry.addData("x", x);
+        //telemetry.addData("rx", rx);
     }
 
     // updates the grabber position if in regular servo mode
@@ -196,15 +196,15 @@ public class PowerPlayMainTeleop extends LinearOpMode {
         // Rising edge detector for right bumper.
         // This moves to the closed position.
         if (currentGamepad1.right_bumper && !previousGamepad1.right_bumper) {
-            grabberL.setPosition(0.28);
-            grabberR.setPosition(0.75);
+            grabberL.setPosition(0.285); // smaller = closed
+            grabberR.setPosition(0.757); // larger = closed
         }
 
         // Rising edge detector for left bumper.
         // This moves to the open position.
         if (currentGamepad1.left_bumper && !previousGamepad1.left_bumper) {
-            grabberL.setPosition(0.41);
-            grabberR.setPosition(0.63);
+            grabberL.setPosition(0.41); // smaller = closed
+            grabberR.setPosition(0.631); // larger = closed
         }
     }
 
@@ -282,12 +282,12 @@ public class PowerPlayMainTeleop extends LinearOpMode {
     // does the telemetry
     public void doTelem() {
         telemetry.addData("Status", "Run Time: " + runtime.toString());
-        telemetry.addData("motorPowerFactor", motorPowerFactor);
         telemetry.addData("slideLvl", slideLvl);
         telemetry.addData("slideL position", slideL.getCurrentPosition());
         telemetry.addData("slideR position", slideR.getCurrentPosition());
         telemetry.addData("grabberL Position", grabberL.getPosition());
         telemetry.addData("grabberR Position", grabberR.getPosition());
+        telemetry.addData("motorPowerFactor", motorPowerFactor);
         telemetry.update();
     }
 }
