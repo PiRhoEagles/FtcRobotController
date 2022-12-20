@@ -24,7 +24,7 @@ public class PowerPlayMainTeleop extends LinearOpMode {
 
 
     // the power of the motors are multiplied by this
-    double motorPowerFactor = 0.6;
+    double motorPowerFactor = 0.8;
 
 
     // how many encoder tics make one full slide motor rotation
