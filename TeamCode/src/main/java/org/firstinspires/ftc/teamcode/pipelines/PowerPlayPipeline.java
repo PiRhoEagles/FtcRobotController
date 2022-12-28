@@ -10,13 +10,11 @@ import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvPipeline;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
-public class PowerPlayBlueSidePipeline extends OpenCvPipeline {
+public class PowerPlayPipeline extends OpenCvPipeline {
     Telemetry telemetry;
 
-    public PowerPlayBlueSidePipeline(Telemetry telemetry) {
+    public PowerPlayPipeline(Telemetry telemetry) {
         this.telemetry = telemetry;
     }
 

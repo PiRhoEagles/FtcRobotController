@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
+import com.acmerobotics.roadrunner.drive.Drive;
 import com.acmerobotics.roadrunner.drive.DriveSignal;
 import com.acmerobotics.roadrunner.drive.MecanumDrive;
 import com.acmerobotics.roadrunner.followers.HolonomicPIDVAFollower;
@@ -52,8 +53,11 @@ import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kV;
  */
 @Config
 public class SampleMecanumDrive extends MecanumDrive {
-    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(8, 0, 0);
-    public static PIDCoefficients HEADING_PID = new PIDCoefficients(8, 0, 0);
+    public static double translation_Kp = 12;
+    public static double rotation_Kp = 20;
+
+    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(8, 0, 2 * Math.sqrt(DriveConstants.kA * translation_Kp) - DriveConstants.kV);
+    public static PIDCoefficients HEADING_PID = new PIDCoefficients(8, 0, 2 * Math.sqrt(DriveConstants.kA / TRACK_WIDTH * rotation_Kp) - DriveConstants.kV / TRACK_WIDTH);
 
     public static double LATERAL_MULTIPLIER = 1.21811;
 

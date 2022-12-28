@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
-import static org.firstinspires.ftc.teamcode.pipelines.PowerPlayBlueSidePipeline.detectionStates.ONE;
+import static org.firstinspires.ftc.teamcode.pipelines.PowerPlayPipeline.detectionStates.ONE;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.pipelines.PowerPlayBlueSidePipeline;
+import org.firstinspires.ftc.teamcode.pipelines.PowerPlayPipeline;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
@@ -23,7 +23,7 @@ public class PowerPlayAuto extends LinearOpMode {
     // the webcam
     OpenCvWebcam webcam;
     // the pipeline
-    PowerPlayBlueSidePipeline pipeline = new PowerPlayBlueSidePipeline(telemetry);
+    PowerPlayPipeline pipeline = new PowerPlayPipeline(telemetry);
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
@@ -46,7 +46,7 @@ public class PowerPlayAuto extends LinearOpMode {
         initCameraStuff();
 
         // Initializes the state variable.
-        PowerPlayBlueSidePipeline.detectionStates state = ONE;
+        PowerPlayPipeline.detectionStates state = ONE;
 
         // Repeatedly detects the state until play is hit.
         // If this runs, init has already been hit, so it'll
