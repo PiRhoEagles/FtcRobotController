@@ -288,10 +288,13 @@ public class SampleMecanumDrive extends MecanumDrive {
 
     @Override
     public void setMotorPowers(double v, double v1, double v2, double v3) {
-        leftFront.setPower(v);
-        leftRear.setPower(v1);
-        rightRear.setPower(v2);
-        rightFront.setPower(v3);
+        double voltage = batteryVoltageSensor.getVoltage();
+        double scale_factor = 12 / voltage;
+
+        leftFront.setPower(v * scale_factor);
+        leftRear.setPower(v1 * scale_factor);
+        rightRear.setPower(v2 * scale_factor);
+        rightFront.setPower(v3 * scale_factor);
     }
 
     @Override

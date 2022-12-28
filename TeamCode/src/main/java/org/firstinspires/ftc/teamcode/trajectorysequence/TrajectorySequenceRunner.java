@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.trajectorysequence;
 
+import static org.firstinspires.ftc.teamcode.drive.DriveConstants.gyrationConstant;
+
 import androidx.annotation.Nullable;
 
 import com.acmerobotics.dashboard.FtcDashboard;
@@ -196,6 +198,9 @@ public class TrajectorySequenceRunner {
 
         dashboard.sendTelemetryPacket(packet);
 
+        if (driveSignal != null) {
+            driveSignal = new DriveSignal(driveSignal.getVel(), new Pose2d(driveSignal.getAccel().vec(), driveSignal.getAccel().getHeading() * gyrationConstant));
+        }
         return driveSignal;
     }
 
