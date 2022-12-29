@@ -9,7 +9,7 @@ public class ScoringMechanism {
     private DcMotor slideR = null;
     private Servo grabberL = null;
     private Servo grabberR = null;
-    int slideLvl = 0;
+
     int prevHeight = 0;
     // how many encoder tics make one full slide motor rotation
     static final double SLIDE_TICS_IN_ROT = 384.5;

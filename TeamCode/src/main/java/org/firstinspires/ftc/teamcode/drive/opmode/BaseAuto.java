@@ -20,10 +20,13 @@ abstract class BaseAuto extends LinearOpMode {
 
     protected SampleMecanumDrive drive;
     protected ScoringMechanism mechanism = new ScoringMechanism();
+
     @Override
     public void runOpMode() throws InterruptedException {
         drive = new SampleMecanumDrive(hardwareMap);
         mechanism.init(hardwareMap);
+
+        mechanism.closeClaw();
 
         initCameraStuff();
         PowerPlayPipeline.detectionStates state = PowerPlayPipeline.detectionStates.ONE;

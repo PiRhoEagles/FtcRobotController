@@ -150,6 +150,14 @@ public class PowerPlayMainTeleop extends LinearOpMode {
         double lsx = gamepad1.left_stick_x;
         double rsx = gamepad1.right_stick_x;
 
+        // disregards lsy or lsx if their absolute value is less than 0.1
+        if (Math.abs(lsy) < 0.1) {
+            lsy = 0.0;
+        }
+        if (Math.abs(lsx) < 0.1) {
+            lsx = 0.0;
+        }
+
         // gets the signs of the stick values
         double lsySign = lsy / Math.abs(lsy);
         double lsxSign = lsx / Math.abs(lsx);
