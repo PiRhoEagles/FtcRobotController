@@ -54,10 +54,10 @@ import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kV;
 @Config
 public class SampleMecanumDrive extends MecanumDrive {
     public static double translation_Kp = 12;
-    public static double rotation_Kp = 20;
+    public static double rotation_Kp = 15;
 
-    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(8, 0, 2 * Math.sqrt(DriveConstants.kA * translation_Kp) - DriveConstants.kV);
-    public static PIDCoefficients HEADING_PID = new PIDCoefficients(8, 0, 2 * Math.sqrt(DriveConstants.kA / TRACK_WIDTH * rotation_Kp) - DriveConstants.kV / TRACK_WIDTH);
+    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(translation_Kp, 0, 2 * Math.sqrt(DriveConstants.kA * translation_Kp) - DriveConstants.kV);
+    public static PIDCoefficients HEADING_PID = new PIDCoefficients(rotation_Kp, 0, 0);
 
     public static double LATERAL_MULTIPLIER = 1.21811;
 
@@ -82,7 +82,7 @@ public class SampleMecanumDrive extends MecanumDrive {
         super(kV, kA, kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
 
         follower = new HolonomicPIDVAFollower(TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID,
-                new Pose2d(0.5, 0.5, Math.toRadians(5.0)), 0.5);
+                new Pose2d(0.5, 0.5, Math.toRadians(1.0)), 0.5);
 
         LynxModuleUtil.ensureMinimumFirmwareVersion(hardwareMap);
 

@@ -57,7 +57,19 @@ public class ScoringMechanism {
                 newHeight = (int)(62 * SLIDE_TICS_IN_CM);
                 break;
             case HIGH:
-                newHeight = (int)(87 * SLIDE_TICS_IN_CM);
+                newHeight = (int)(88 * SLIDE_TICS_IN_CM);
+                break;
+            case STACK2:
+                newHeight = (int)(3.25 * SLIDE_TICS_IN_CM);
+                break;
+            case STACK3:
+                newHeight = (int)((3.25 * 2) * SLIDE_TICS_IN_CM);
+                break;
+            case STACK4:
+                newHeight = (int)((3.25 * 3) * SLIDE_TICS_IN_CM);
+                break;
+            case STACK5:
+                newHeight = (int)((3.25 * 4) * SLIDE_TICS_IN_CM);
                 break;
         }
 
@@ -88,6 +100,10 @@ public class ScoringMechanism {
         FLOOR,
         LOW,
         MID,
-        HIGH
+        HIGH,
+        STACK5,
+        STACK4,
+        STACK3,
+        STACK2
     }
 }
