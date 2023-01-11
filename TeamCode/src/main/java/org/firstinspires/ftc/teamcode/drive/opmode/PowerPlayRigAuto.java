@@ -19,7 +19,6 @@ public class PowerPlayRigAuto extends BaseAuto{
                 return drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
                         // raise cone a little and move towards pole
                         .addTemporalMarker(() -> mechanism.moveSlides(ScoringMechanism.slidePositions.STACK2)) // raise cone a little
-                        //.splineTo(new Vector2d(42, 0), Math.toRadians(15))
                         .lineToSplineHeading(new Pose2d(42,0,Math.toRadians(15))) // move near pole
 
                         // raise slides to high & move to place cone 1 over pole
@@ -70,7 +69,7 @@ public class PowerPlayRigAuto extends BaseAuto{
 
                         // move to pole and drop cone 3
                         .lineToSplineHeading(new Pose2d(50,3,Math.toRadians(45))) // move to face pole
-                        .lineToSplineHeading(new Pose2d(53.5,6,Math.toRadians(45))) // turn to pole and place cone over it
+                        .lineToSplineHeading(new Pose2d(52.5,5,Math.toRadians(45))) // turn to pole and place cone over it
                         .waitSeconds(0.2) // wait for slides to stop shaking
                         .addTemporalMarker(() -> mechanism.openClaw()) // drops cone on pole
                         .waitSeconds(0.3) // wait for grabber to open
@@ -85,7 +84,6 @@ public class PowerPlayRigAuto extends BaseAuto{
                 return drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
                         // raise cone a little and move towards pole
                         .addTemporalMarker(() -> mechanism.moveSlides(ScoringMechanism.slidePositions.STACK2)) // raise cone a little
-                        //.splineTo(new Vector2d(42, 0), Math.toRadians(15))
                         .lineToSplineHeading(new Pose2d(42,0,Math.toRadians(15))) // move near pole
 
                         // raise slides to high & move to place cone 1 over pole
@@ -136,7 +134,7 @@ public class PowerPlayRigAuto extends BaseAuto{
 
                         // move to pole and drop cone 3
                         .lineToSplineHeading(new Pose2d(50,3,Math.toRadians(45))) // move to face pole
-                        .lineToSplineHeading(new Pose2d(53.5,6,Math.toRadians(45))) // turn to pole and place cone over it
+                        .lineToSplineHeading(new Pose2d(52.5,5,Math.toRadians(45))) // turn to pole and place cone over it
                         .waitSeconds(0.2) // wait for slides to stop shaking
                         .addTemporalMarker(() -> mechanism.openClaw()) // drops cone on pole
                         .waitSeconds(0.3) // wait for grabber to open
@@ -150,7 +148,6 @@ public class PowerPlayRigAuto extends BaseAuto{
                 return drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
                         // raise cone a little and move towards pole
                         .addTemporalMarker(() -> mechanism.moveSlides(ScoringMechanism.slidePositions.STACK2)) // raise cone a little
-                        //.splineTo(new Vector2d(42, 0), Math.toRadians(15))
                         .lineToSplineHeading(new Pose2d(42,0,Math.toRadians(15))) // move near pole
 
                         // raise slides to high & move to place cone 1 over pole
@@ -201,7 +198,7 @@ public class PowerPlayRigAuto extends BaseAuto{
 
                         // move to pole and drop cone 3
                         .lineToSplineHeading(new Pose2d(50,3,Math.toRadians(45))) // move to face pole
-                        .lineToSplineHeading(new Pose2d(53.5,6,Math.toRadians(45))) // turn to pole and place cone over it
+                        .lineToSplineHeading(new Pose2d(52.5,5,Math.toRadians(45))) // turn to pole and place cone over it
                         .waitSeconds(0.2) // wait for slides to stop shaking
                         .addTemporalMarker(() -> mechanism.openClaw()) // drops cone on pole
                         .waitSeconds(0.3) // wait for grabber to open

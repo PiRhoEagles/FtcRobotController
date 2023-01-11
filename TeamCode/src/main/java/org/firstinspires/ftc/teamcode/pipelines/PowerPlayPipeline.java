@@ -21,13 +21,13 @@ public class PowerPlayPipeline extends OpenCvPipeline {
     // the bounds for detecting a specific color
     // they are made public static because then they can be edited with EOCV-Sim
     public static Scalar lowerBound1 = new Scalar(151.6, 216.8, 192.7, 0);
-    public static Scalar upperBound1 = new Scalar(185.6, 255.0, 212.5, 255);
+    public static Scalar upperBound1 = new Scalar(192.7, 255.0, 240.8, 255);
 
     public static Scalar lowerBound2 = new Scalar(242.3, 211.1, 117.6, 0);
     public static Scalar upperBound2 = new Scalar(255.0, 255.0, 185.6, 255);
 
-    public static Scalar lowerBound3 = new Scalar(212.5, 155.8, 182.8, 0);
-    public static Scalar upperBound3 = new Scalar(255.0, 188.4, 223.8, 255);
+    public static Scalar lowerBound3 = new Scalar(206.8, 155.8, 182.8, 0);
+    public static Scalar upperBound3 = new Scalar(255.0, 188.4, 229.5, 255);
 
 
     // the states that can be detected
