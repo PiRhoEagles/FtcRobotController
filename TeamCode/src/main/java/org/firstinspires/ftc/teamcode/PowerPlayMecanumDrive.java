@@ -50,24 +50,26 @@ public class PowerPlayMecanumDrive extends LinearOpMode {
 
             //----------CALC motorPowerFactor----------
 
-            try {
-                // Store the gamepad values from the previous loop iteration in
-                // previousGamepad1 to be used in this loop iteration.
-                // This is equivalent to doing this at the end of the previous
-                // loop iteration, as it will run in the same order except for
-                // the first/last iteration of the loop.
-                previousGamepad1.copy(currentGamepad1);
-
-                // Store the gamepad values from this loop iteration in
-                // currentGamepad1 to be used for the entirety of this loop iteration.
-                // This prevents the gamepad values from changing between being
-                // used and stored in previousGamepad1/2.
-                currentGamepad1.copy(gamepad1);
-            }
-            catch (com.qualcomm.robotcore.exception.RobotCoreException e) {
-                // Swallow the possible exception, it should not happen as
-                // currentGamepad1 are being copied from valid Gamepads.
-            }
+            previousGamepad1 = currentGamepad1;
+            currentGamepad1 = gamepad1;
+//            try {
+//                // Store the gamepad values from the previous loop iteration in
+//                // previousGamepad1 to be used in this loop iteration.
+//                // This is equivalent to doing this at the end of the previous
+//                // loop iteration, as it will run in the same order except for
+//                // the first/last iteration of the loop.
+//                previousGamepad1.copy(currentGamepad1);
+//
+//                // Store the gamepad values from this loop iteration in
+//                // currentGamepad1 to be used for the entirety of this loop iteration.
+//                // This prevents the gamepad values from changing between being
+//                // used and stored in previousGamepad1/2.
+//                currentGamepad1.copy(gamepad1);
+//            }
+//            catch (com.qualcomm.robotcore.exception.RobotCoreException e) {
+//                // Swallow the possible exception, it should not happen as
+//                // currentGamepad1 are being copied from valid Gamepads.
+//            }
 
             // rising edge detector for dpad_up
             if (currentGamepad1.dpad_up && !previousGamepad1.dpad_up) {

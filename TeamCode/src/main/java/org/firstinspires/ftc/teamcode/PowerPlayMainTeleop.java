@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.RobotLog;
 
 @TeleOp(name="Power Play Main Teleop", group="Linear Opmode")
 //@Disabled
@@ -115,6 +116,9 @@ public class PowerPlayMainTeleop extends LinearOpMode {
 
     // makes copies of the gamepad
     public void copyGamepad() {
+//        previousGamepad1 = currentGamepad1;
+//        currentGamepad1 = gamepad1;
+
         try {
             // Store the gamepad values from the previous loop iteration in
             // previousGamepad1 to be used in this loop iteration
@@ -124,7 +128,7 @@ public class PowerPlayMainTeleop extends LinearOpMode {
             // currentGamepad1 to be used for the entirety of this loop iteration
             currentGamepad1.copy(gamepad1);
         }
-        catch (com.qualcomm.robotcore.exception.RobotCoreException e) {
+        catch (Exception e) {
             // Swallow the possible exception, it should not happen as
             // currentGamepad1 are being copied from valid Gamepads
         }
