@@ -32,6 +32,9 @@ public class ScoringMechanism {
         grabberL = hwmap.get(Servo.class, "grabberL");
         grabberR = hwmap.get(Servo.class, "grabberR");
 
+        grabberL.getController().pwmEnable();
+        grabberR.getController().pwmEnable();
+
     }
 
     public void closeClaw() {

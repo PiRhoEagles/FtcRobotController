@@ -23,7 +23,7 @@ public class PowerPlayLefAuto extends BaseAuto{
 
                         // raise slides to high & move to place cone 1 over pole
                         .addTemporalMarker(() -> mechanism.moveSlides(ScoringMechanism.slidePositions.HIGH)) // start raising slides to high
-                        .lineToSplineHeading(new Pose2d(54,-8,Math.toRadians(-30))) // move over pole
+                        .lineToSplineHeading(new Pose2d(55.5,-10,Math.toRadians(-30))) // move over pole
                         .waitSeconds(0.2) // wait for slides to raise
 
                         // drops cone 1
@@ -47,7 +47,7 @@ public class PowerPlayLefAuto extends BaseAuto{
 
                         // move to pole and drop cone 2
                         .lineToSplineHeading(new Pose2d(50,-3,Math.toRadians(-45))) // move to face pole
-                        .lineToSplineHeading(new Pose2d(53.5,-5,Math.toRadians(-45))) // turn to pole and place cone over it
+                        .lineToSplineHeading(new Pose2d(54.5,-7,Math.toRadians(-45))) // turn to pole and place cone over it
                         .waitSeconds(0.2) // wait for slides to stop shaking
                         .addTemporalMarker(() -> mechanism.openClaw()) // drops cone on pole
                         .waitSeconds(0.3) // wait for grabber to open
@@ -56,7 +56,7 @@ public class PowerPlayLefAuto extends BaseAuto{
                         // move to cone stack
                         .lineToSplineHeading(new Pose2d(40,0,Math.toRadians(0))) // move back from pole
                         .addTemporalMarker(() -> mechanism.moveSlides(ScoringMechanism.slidePositions.STACK4)) // lower slides
-                        .splineToLinearHeading(new Pose2d(52, 24,Math.toRadians(82)),Math.toRadians(40)) // move to cone stack
+                        .splineToLinearHeading(new Pose2d(51, 24,Math.toRadians(82)),Math.toRadians(40)) // move to cone stack
 
                         // grab cone 3
                         .waitSeconds(0.1) // wait for robot to stop shaking
@@ -69,7 +69,7 @@ public class PowerPlayLefAuto extends BaseAuto{
 
                         // move to pole and drop cone 3
                         .lineToSplineHeading(new Pose2d(50,-3,Math.toRadians(-45))) // move to face pole
-                        .lineToSplineHeading(new Pose2d(52.5,-5,Math.toRadians(-45))) // turn to pole and place cone over it
+                        .lineToSplineHeading(new Pose2d(53.5,-7,Math.toRadians(-45))) // turn to pole and place cone over it
                         .waitSeconds(0.2) // wait for slides to stop shaking
                         .addTemporalMarker(() -> mechanism.openClaw()) // drops cone on pole
                         .waitSeconds(0.3) // wait for grabber to open

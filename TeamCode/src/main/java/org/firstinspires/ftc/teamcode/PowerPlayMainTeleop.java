@@ -255,6 +255,8 @@ public class PowerPlayMainTeleop extends LinearOpMode {
             newHeight = (int)(62 * SLIDE_TICS_IN_CM);
         } else if (newSlideLvl == 3) {
             newHeight = (int)(87 * SLIDE_TICS_IN_CM);
+        } else if (newSlideLvl == 4) {
+            newHeight = (int)(3.25 * SLIDE_TICS_IN_CM);
         }
 
         // moves the slides to the desired position
@@ -288,6 +290,8 @@ public class PowerPlayMainTeleop extends LinearOpMode {
             moveSlidesToLvl(2);
         } else if (currentGamepad1.x && !previousGamepad1.x) {
             moveSlidesToLvl(3);
+        } else if (currentGamepad1.dpad_right && !previousGamepad1.dpad_right) {
+            moveSlidesToLvl(4);
         }
     }
 
