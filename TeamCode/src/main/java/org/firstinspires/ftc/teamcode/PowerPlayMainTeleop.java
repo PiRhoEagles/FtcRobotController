@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.RobotLog;
 
 @TeleOp(name="Power Play Main Teleop", group="Linear Opmode")
 //@Disabled
@@ -115,6 +116,9 @@ public class PowerPlayMainTeleop extends LinearOpMode {
 
     // makes copies of the gamepad
     public void copyGamepad() {
+//        previousGamepad1 = currentGamepad1;
+//        currentGamepad1 = gamepad1;
+
         try {
             // Store the gamepad values from the previous loop iteration in
             // previousGamepad1 to be used in this loop iteration
@@ -124,7 +128,7 @@ public class PowerPlayMainTeleop extends LinearOpMode {
             // currentGamepad1 to be used for the entirety of this loop iteration
             currentGamepad1.copy(gamepad1);
         }
-        catch (com.qualcomm.robotcore.exception.RobotCoreException e) {
+        catch (Exception e) {
             // Swallow the possible exception, it should not happen as
             // currentGamepad1 are being copied from valid Gamepads
         }
@@ -251,6 +255,8 @@ public class PowerPlayMainTeleop extends LinearOpMode {
             newHeight = (int)(62 * SLIDE_TICS_IN_CM);
         } else if (newSlideLvl == 3) {
             newHeight = (int)(87 * SLIDE_TICS_IN_CM);
+        } else if (newSlideLvl == 4) {
+            newHeight = (int)(3.25 * SLIDE_TICS_IN_CM);
         }
 
         // moves the slides to the desired position
@@ -284,6 +290,8 @@ public class PowerPlayMainTeleop extends LinearOpMode {
             moveSlidesToLvl(2);
         } else if (currentGamepad1.x && !previousGamepad1.x) {
             moveSlidesToLvl(3);
+        } else if (currentGamepad1.dpad_right && !previousGamepad1.dpad_right) {
+            moveSlidesToLvl(4);
         }
     }
 
