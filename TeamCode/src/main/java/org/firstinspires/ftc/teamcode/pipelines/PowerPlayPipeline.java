@@ -40,6 +40,12 @@ public class PowerPlayPipeline extends OpenCvPipeline {
     // declares the current detected state to ONE
     detectionStates state = detectionStates.ONE;
 
+    // the space to crop the input image to
+    int cropT = 0;
+    int cropB = 50;
+    int cropL = 140;
+    int cropR = 185;
+
     // used to store the color shifted input
     Mat colorShiftedIMG = new Mat();
 
@@ -127,6 +133,10 @@ public class PowerPlayPipeline extends OpenCvPipeline {
         Imgproc.cvtColor(input, colorShiftedIMG, Imgproc.COLOR_RGB2BGR);
         // blurs the image a little
         Imgproc.medianBlur(colorShiftedIMG, colorShiftedIMG, 5);
+
+        // crops the image
+        colorShiftedIMG = colorShiftedIMG.rowRange(cropT, cropB);
+        colorShiftedIMG = colorShiftedIMG.colRange(cropL, cropR);
 
         // Gets colorShiftedIMG, a color shifted version of the input image, and converts it to
         // a binary image based on whether each pixel is within a certain range.

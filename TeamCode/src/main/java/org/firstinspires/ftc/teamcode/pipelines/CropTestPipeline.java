@@ -20,10 +20,10 @@ public class CropTestPipeline extends OpenCvPipeline {
         this.telemetry = telemetry;
     }
 
-    int top = 0;
-    int bottom = 50;
-    int left = 0;
-    int right = 50;
+    public static int top = 0;
+    public static int bottom = 100;
+    public static int left = 0;
+    public static int right = 100;
     Mat croppedIMG = new Mat();
 
     @Override
