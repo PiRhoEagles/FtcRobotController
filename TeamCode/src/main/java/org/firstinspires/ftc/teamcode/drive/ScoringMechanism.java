@@ -19,15 +19,17 @@ public class ScoringMechanism {
     static final double SLIDE_TICS_IN_CM = SLIDE_TICS_IN_ROT / (SLIDE_MM_FROM_ROT / 10);
 
 
-    public void init(HardwareMap hwmap) {
+    public void init(HardwareMap hwmap, boolean resetSlideEncoders) {
         slideL = hwmap.get(DcMotor.class, "slideL");
         slideR = hwmap.get(DcMotor.class, "slideR");
         slideR.setDirection(DcMotor.Direction.REVERSE);
 
-        slideL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        slideR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        slideL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        slideR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        if (resetSlideEncoders) {
+            slideL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            slideR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            slideL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            slideR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
 
         grabberL = hwmap.get(Servo.class, "grabberL");
         grabberR = hwmap.get(Servo.class, "grabberR");

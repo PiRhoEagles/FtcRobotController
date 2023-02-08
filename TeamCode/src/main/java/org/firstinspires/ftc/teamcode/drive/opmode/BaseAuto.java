@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.drive.opmode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.MotorControlAlgorithm;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
@@ -24,7 +25,7 @@ abstract class BaseAuto extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         drive = new SampleMecanumDrive(hardwareMap);
-        mechanism.init(hardwareMap);
+        mechanism.init(hardwareMap, true);
 
         mechanism.closeClaw();
 
@@ -69,5 +70,27 @@ abstract class BaseAuto extends LinearOpMode {
                 // This will be called if the camera could not be opened.
             }
         });
+    }
+
+    // Used to store custom Pose2D that uses degrees instead of radians.
+    // This makes it easy to edit positions from the FTC Dashboard.
+    public static class customPose2D {
+        public double x;
+        public double y;
+        public double h;
+        public double tan;
+
+        public customPose2D(double x, double y, double h) {
+            this.x = x;
+            this.y = y;
+            this.h = h;
+        }
+
+        public customPose2D(double x, double y, double h, double tan) {
+            this.x = x;
+            this.y = y;
+            this.h = h;
+            this.tan = tan;
+        }
     }
 }

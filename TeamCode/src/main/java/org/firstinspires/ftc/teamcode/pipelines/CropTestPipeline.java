@@ -28,6 +28,8 @@ public class CropTestPipeline extends OpenCvPipeline {
 
     @Override
     public Mat processFrame(Mat input) {
+        // WARNING: apparently this method creates a memory leak as both
+        // rowRange and colRange create a new Mat every time they run.
         croppedIMG = input.rowRange(top, bottom);
         croppedIMG = croppedIMG.colRange(left, right);
 

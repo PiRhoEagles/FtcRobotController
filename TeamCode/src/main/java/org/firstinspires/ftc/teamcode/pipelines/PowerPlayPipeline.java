@@ -18,18 +18,6 @@ public class PowerPlayPipeline extends OpenCvPipeline {
         this.telemetry = telemetry;
     }
 
-    // the bounds for detecting a specific color
-    // they are made public static because then they can be edited with EOCV-Sim
-    public static Scalar lowerBound1 = new Scalar(97.8, 174.3, 181.3, 0);
-    public static Scalar upperBound1 = new Scalar(164.3, 238.0, 208.3, 255);
-
-    public static Scalar lowerBound2 = new Scalar(196.9, 182.8, 126.1, 0);
-    public static Scalar upperBound2 = new Scalar(255.0, 247.9, 157.3, 255);
-
-    public static Scalar lowerBound3 = new Scalar(162.5, 130.9, 180.5, 0);
-    public static Scalar upperBound3 = new Scalar(226.8, 173.8, 223.4, 255);
-
-
     // the states that can be detected
     public enum detectionStates {
         ONE,
@@ -40,11 +28,29 @@ public class PowerPlayPipeline extends OpenCvPipeline {
     // declares the current detected state to ONE
     detectionStates state = detectionStates.ONE;
 
-    // the space to crop the input image to
-    int cropT = 0;
-    int cropB = 50;
-    int cropL = 140;
-    int cropR = 185;
+
+    // the bounds for detecting a specific color
+    // they are made public static because then they can be edited with EOCV-Sim
+    public static Scalar lowerBound1 = new Scalar(110.5, 198.3, 188.4, 0);
+    public static Scalar upperBound1 = new Scalar(147.3, 245.1, 249.3, 255);
+
+    public static Scalar lowerBound2 = new Scalar(195.5, 184.2, 120.4, 0);
+    public static Scalar upperBound2 = new Scalar(255, 240.8, 165.8, 255);
+
+    public static Scalar lowerBound3 = new Scalar(167.2, 131.8, 185.6, 0);
+    public static Scalar upperBound3 = new Scalar(196.9, 155.8, 222.4, 255);
+
+    // OLD TRAINING
+//    public static Scalar lowerBound1 = new Scalar(117.6, 187, 175.7, 0);
+//    public static Scalar upperBound1 = new Scalar(134, 203, 190, 255); // maybe 187, 249.3, 225.3
+//
+//    public static Scalar lowerBound2 = new Scalar(204, 179.9, 117.6, 0);
+//    public static Scalar upperBound2 = new Scalar(255.0, 245.1, 157.3, 255);
+//
+//    public static Scalar lowerBound3 = new Scalar(175, 140, 185, 0);
+//    public static Scalar upperBound3 = new Scalar(200, 165, 205, 255); // maybe 255, 187, 228.1
+
+
 
     // used to store the color shifted input
     Mat colorShiftedIMG = new Mat();
@@ -134,10 +140,6 @@ public class PowerPlayPipeline extends OpenCvPipeline {
         // blurs the image a little
         Imgproc.medianBlur(colorShiftedIMG, colorShiftedIMG, 5);
 
-        // crops the image
-        colorShiftedIMG = colorShiftedIMG.rowRange(cropT, cropB);
-        colorShiftedIMG = colorShiftedIMG.colRange(cropL, cropR);
-
         // Gets colorShiftedIMG, a color shifted version of the input image, and converts it to
         // a binary image based on whether each pixel is within a certain range.
         // This binary output image is stored as mask{num} for each corresponding range.
@@ -184,8 +186,8 @@ public class PowerPlayPipeline extends OpenCvPipeline {
 
         // displays the detected state in telemetry
         // WARNING: remove this if this class is being used in another file
-        //telemetry.addData("Detected State", state);
-        //telemetry.update();
+        telemetry.addData("Detected State", state);
+        telemetry.update();
 
         // returns the sum of the masks
         return sum;

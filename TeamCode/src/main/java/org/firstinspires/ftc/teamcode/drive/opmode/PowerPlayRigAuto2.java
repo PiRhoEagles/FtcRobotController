@@ -20,26 +20,36 @@ public class PowerPlayRigAuto2 extends BaseAuto{
     public static double backFromCSY = -6;
     public static double backFromCSH = -84;
 
-    public static double poleX = 56;
-    public static double poleY = 6;
+    public static double poleX = 57; // 56
+    public static double poleY = 7; // 6
     public static double poleH = 50;
 
+    public static double backFromPoleX = 38;
+    public static double backFromPoleY = 3.5;
+    public static double backFromPoleH = 0;
 
     @Override
     public TrajectorySequence trajectorySequenceBuilder(PowerPlayPipeline.detectionStates detectionState) {
         switch (detectionState) {
             case ONE:
                 return drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
-                        // open and raise claw
-                        .addTemporalMarker(() -> mechanism.openClaw())
                         .addTemporalMarker(() -> mechanism.moveSlides(ScoringMechanism.slidePositions.STACK2)) // raise cone a little
 
-                        // go to cone stack
-                        .lineToSplineHeading(new Pose2d(48,0,Math.toRadians(0)))
-                        .lineToSplineHeading(new Pose2d(49,0,Math.toRadians(-82)))
-                        .lineToSplineHeading(new Pose2d(coneStackX,coneStackY,Math.toRadians(coneStackH)))
+                        // go to pole and place cone
+                        .lineToSplineHeading(new Pose2d(45,0,Math.toRadians(0))) // to center area
+                        .addTemporalMarker(() -> mechanism.moveSlides(ScoringMechanism.slidePositions.HIGH)) // raise high
+                        .lineToSplineHeading(new Pose2d(poleX,poleY,Math.toRadians(poleH)))
+                        .waitSeconds(0.3) // wait for slides to stop shaking
+                        .addTemporalMarker(() -> mechanism.openClaw()) // drops cone on pole
+                        .waitSeconds(0.2) // wait for grabber to open
 
-                        // grab cone 2
+                        // -----CYCLE 1-----
+                        // go to cone stack
+                        .lineToSplineHeading(new Pose2d(backFromPoleX,backFromPoleY,Math.toRadians(backFromPoleH))) // move back
+                        .addTemporalMarker(() -> mechanism.moveSlides(ScoringMechanism.slidePositions.STACK5)) // lower
+                        .lineToSplineHeading(new Pose2d(coneStackX,coneStackY,Math.toRadians(coneStackH))) // to cone stack
+
+                        // grab cone
                         .waitSeconds(0.1) // wait for robot to stop shaking
                         .addTemporalMarker(() -> mechanism.closeClaw()) // close claw and grab cone
                         .waitSeconds(0.3) // wait for claw to close
@@ -53,76 +63,266 @@ public class PowerPlayRigAuto2 extends BaseAuto{
                         .addTemporalMarker(() -> mechanism.openClaw()) // drops cone on pole
                         .waitSeconds(0.3) // wait for grabber to open
 
-                        // move back to cone stack
-                        .back(1)
-                        .addTemporalMarker(() -> mechanism.moveSlides(ScoringMechanism.slidePositions.FLOOR))
-                        .lineToSplineHeading(new Pose2d(backFromCSX,backFromCSY,Math.toRadians(backFromCSH)))
-                        .lineToSplineHeading(new Pose2d(coneStackX,coneStackY,Math.toRadians(coneStackH)))
+                        // -----CYCLE 2-----
+                        // go to cone stack
+                        .lineToSplineHeading(new Pose2d(backFromPoleX,backFromPoleY,Math.toRadians(backFromPoleH))) // move back
+                        .addTemporalMarker(() -> mechanism.moveSlides(ScoringMechanism.slidePositions.STACK4)) // lower
+                        .lineToSplineHeading(new Pose2d(coneStackX,coneStackY-2,Math.toRadians(coneStackH))) // to cone stack
 
+                        // grab cone
+                        .waitSeconds(0.1) // wait for robot to stop shaking
+                        .addTemporalMarker(() -> mechanism.closeClaw()) // close claw and grab cone
+                        .waitSeconds(0.3) // wait for claw to close
+
+                        // move to pole
+                        .addTemporalMarker(() -> mechanism.moveSlides(ScoringMechanism.slidePositions.LOW))
+                        .lineToSplineHeading(new Pose2d(backFromCSX,backFromCSY,Math.toRadians(backFromCSH)))
+                        .addTemporalMarker(() -> mechanism.moveSlides(ScoringMechanism.slidePositions.HIGH))
+                        .lineToSplineHeading(new Pose2d(poleX,poleY,Math.toRadians(poleH)))
+                        .waitSeconds(0.2) // wait for slides to stop shaking
+                        .addTemporalMarker(() -> mechanism.openClaw()) // drops cone on pole
+                        .waitSeconds(0.3) // wait for grabber to open
+
+                        // -----CYCLE 3-----
+                        // go to cone stack
+                        .lineToSplineHeading(new Pose2d(backFromPoleX,backFromPoleY,Math.toRadians(backFromPoleH))) // move back
+                        .addTemporalMarker(() -> mechanism.moveSlides(ScoringMechanism.slidePositions.STACK3)) // lower
+                        .lineToSplineHeading(new Pose2d(coneStackX,coneStackY-3,Math.toRadians(coneStackH))) // to cone stack
+
+                        // grab cone
+                        .waitSeconds(0.1) // wait for robot to stop shaking
+                        .addTemporalMarker(() -> mechanism.closeClaw()) // close claw and grab cone
+                        .waitSeconds(0.3) // wait for claw to close
+
+                        // move to pole
+                        .addTemporalMarker(() -> mechanism.moveSlides(ScoringMechanism.slidePositions.LOW))
+                        .lineToSplineHeading(new Pose2d(backFromCSX,backFromCSY,Math.toRadians(backFromCSH)))
+                        .addTemporalMarker(() -> mechanism.moveSlides(ScoringMechanism.slidePositions.HIGH))
+                        .lineToSplineHeading(new Pose2d(poleX,poleY,Math.toRadians(poleH)))
+                        .waitSeconds(0.2) // wait for slides to stop shaking
+                        .addTemporalMarker(() -> mechanism.openClaw()) // drops cone on pole
+                        .waitSeconds(0.3) // wait for grabber to open
+
+                        // -----CYCLE 4-----
+                        // go to cone stack
+                        .lineToSplineHeading(new Pose2d(backFromPoleX,backFromPoleY,Math.toRadians(backFromPoleH))) // move back
+                        .addTemporalMarker(() -> mechanism.moveSlides(ScoringMechanism.slidePositions.STACK2)) // lower
+                        .lineToSplineHeading(new Pose2d(coneStackX,coneStackY-4,Math.toRadians(coneStackH))) // to cone stack
+
+                        // grab cone
+                        .waitSeconds(0.1) // wait for robot to stop shaking
+                        .addTemporalMarker(() -> mechanism.closeClaw()) // close claw and grab cone
+                        .waitSeconds(0.3) // wait for claw to close
+
+                        // move to pole
+                        .addTemporalMarker(() -> mechanism.moveSlides(ScoringMechanism.slidePositions.LOW))
+                        .lineToSplineHeading(new Pose2d(backFromCSX,backFromCSY,Math.toRadians(backFromCSH)))
+                        .addTemporalMarker(() -> mechanism.moveSlides(ScoringMechanism.slidePositions.HIGH))
+                        .lineToSplineHeading(new Pose2d(poleX,poleY-3,Math.toRadians(poleH)))
+                        .waitSeconds(0.2) // wait for slides to stop shaking
+                        .addTemporalMarker(() -> mechanism.openClaw()) // drops cone on pole
+                        .waitSeconds(0.3) // wait for grabber to open
+
+                        .lineToSplineHeading(new Pose2d(45,0,Math.toRadians(0))) // to center area
+                        .addTemporalMarker(() -> mechanism.moveSlides(ScoringMechanism.slidePositions.FLOOR)) // lower
+
+                        // move left to position 1
+                        .lineToSplineHeading(new Pose2d(45,24,Math.toRadians(0)))
 
                         .build();
-            case TWO: case THREE:
+            case TWO:
                 return drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
-                        // raise cone a little and move towards pole
                         .addTemporalMarker(() -> mechanism.moveSlides(ScoringMechanism.slidePositions.STACK2)) // raise cone a little
-                        .lineToSplineHeading(new Pose2d(42,0,Math.toRadians(15))) // move near pole
 
-                        // raise slides to high & move to place cone 1 over pole
-                        .addTemporalMarker(() -> mechanism.moveSlides(ScoringMechanism.slidePositions.HIGH)) // start raising slides to high
-                        .lineToSplineHeading(new Pose2d(54,8,Math.toRadians(30))) // move over pole
-                        .waitSeconds(0.2) // wait for slides to raise
-
-                        // drops cone 1
+                        // go to pole and place cone
+                        .lineToSplineHeading(new Pose2d(45,0,Math.toRadians(0))) // to center area
+                        .addTemporalMarker(() -> mechanism.moveSlides(ScoringMechanism.slidePositions.HIGH)) // raise high
+                        .lineToSplineHeading(new Pose2d(poleX,poleY,Math.toRadians(poleH)))
+                        .waitSeconds(0.3) // wait for slides to stop shaking
                         .addTemporalMarker(() -> mechanism.openClaw()) // drops cone on pole
-                        .waitSeconds(0.3) // wait for grabber to open
+                        .waitSeconds(0.2) // wait for grabber to open
 
-                        //-----CYCLE 2-----
-                        // move to cone stack
-                        .lineToSplineHeading(new Pose2d(40,0,Math.toRadians(0))) // move back from pole
-                        .addTemporalMarker(() -> mechanism.moveSlides(ScoringMechanism.slidePositions.STACK5)) // lower slides
-                        .splineToLinearHeading(new Pose2d(52, -24,Math.toRadians(-82)),Math.toRadians(-40)) // move to cone stack
+                        // -----CYCLE 1-----
+                        // go to cone stack
+                        .lineToSplineHeading(new Pose2d(backFromPoleX,backFromPoleY,Math.toRadians(backFromPoleH))) // move back
+                        .addTemporalMarker(() -> mechanism.moveSlides(ScoringMechanism.slidePositions.STACK5)) // lower
+                        .lineToSplineHeading(new Pose2d(coneStackX,coneStackY,Math.toRadians(coneStackH))) // to cone stack
 
-                        // grab cone 2
+                        // grab cone
                         .waitSeconds(0.1) // wait for robot to stop shaking
                         .addTemporalMarker(() -> mechanism.closeClaw()) // close claw and grab cone
                         .waitSeconds(0.3) // wait for claw to close
 
-                        // move away from cone stack
-                        .addTemporalMarker(() -> mechanism.moveSlides(ScoringMechanism.slidePositions.HIGH)) // raise the slides above the cone stack
-                        .lineToSplineHeading(new Pose2d(50,0,Math.toRadians(-82))) // move away from cone stack
-
-                        // move to pole and drop cone 2
-                        .lineToSplineHeading(new Pose2d(50,3,Math.toRadians(45))) // move to face pole
-                        .lineToSplineHeading(new Pose2d(53.5,5,Math.toRadians(45))) // turn to pole and place cone over it
+                        // move to pole
+                        .addTemporalMarker(() -> mechanism.moveSlides(ScoringMechanism.slidePositions.LOW))
+                        .lineToSplineHeading(new Pose2d(backFromCSX,backFromCSY,Math.toRadians(backFromCSH)))
+                        .addTemporalMarker(() -> mechanism.moveSlides(ScoringMechanism.slidePositions.HIGH))
+                        .lineToSplineHeading(new Pose2d(poleX,poleY,Math.toRadians(poleH)))
                         .waitSeconds(0.2) // wait for slides to stop shaking
                         .addTemporalMarker(() -> mechanism.openClaw()) // drops cone on pole
                         .waitSeconds(0.3) // wait for grabber to open
 
-                        //-----CYCLE 3-----
-                        // move to cone stack
-                        .lineToSplineHeading(new Pose2d(40,0,Math.toRadians(0))) // move back from pole
-                        .addTemporalMarker(() -> mechanism.moveSlides(ScoringMechanism.slidePositions.STACK4)) // lower slides
-                        .splineToLinearHeading(new Pose2d(52, -24,Math.toRadians(-82)),Math.toRadians(-40)) // move to cone stack
+                        // -----CYCLE 2-----
+                        // go to cone stack
+                        .lineToSplineHeading(new Pose2d(backFromPoleX,backFromPoleY,Math.toRadians(backFromPoleH))) // move back
+                        .addTemporalMarker(() -> mechanism.moveSlides(ScoringMechanism.slidePositions.STACK4)) // lower
+                        .lineToSplineHeading(new Pose2d(coneStackX,coneStackY,Math.toRadians(coneStackH))) // to cone stack
 
-                        // grab cone 3
+                        // grab cone
                         .waitSeconds(0.1) // wait for robot to stop shaking
                         .addTemporalMarker(() -> mechanism.closeClaw()) // close claw and grab cone
                         .waitSeconds(0.3) // wait for claw to close
 
-                        // move away from cone stack
-                        .addTemporalMarker(() -> mechanism.moveSlides(ScoringMechanism.slidePositions.HIGH)) // raise the slides above the cone stack
-                        .lineToSplineHeading(new Pose2d(50,0,Math.toRadians(-82))) // move away from cone stack
-
-                        // move to pole and drop cone 3
-                        .lineToSplineHeading(new Pose2d(50,3,Math.toRadians(45))) // move to face pole
-                        .lineToSplineHeading(new Pose2d(52.5,5,Math.toRadians(45))) // turn to pole and place cone over it
+                        // move to pole
+                        .addTemporalMarker(() -> mechanism.moveSlides(ScoringMechanism.slidePositions.LOW))
+                        .lineToSplineHeading(new Pose2d(backFromCSX,backFromCSY,Math.toRadians(backFromCSH)))
+                        .addTemporalMarker(() -> mechanism.moveSlides(ScoringMechanism.slidePositions.HIGH))
+                        .lineToSplineHeading(new Pose2d(poleX,poleY,Math.toRadians(poleH)))
                         .waitSeconds(0.2) // wait for slides to stop shaking
                         .addTemporalMarker(() -> mechanism.openClaw()) // drops cone on pole
                         .waitSeconds(0.3) // wait for grabber to open
 
-                        //-----PARK-----
-                        .lineToSplineHeading(new Pose2d(46,0,Math.toRadians(0))) // move to position 2
-                        .addTemporalMarker(() -> mechanism.moveSlides(ScoringMechanism.slidePositions.FLOOR)) // move slides to floor
+                        // -----CYCLE 3-----
+                        // go to cone stack
+                        .lineToSplineHeading(new Pose2d(backFromPoleX,backFromPoleY,Math.toRadians(backFromPoleH))) // move back
+                        .addTemporalMarker(() -> mechanism.moveSlides(ScoringMechanism.slidePositions.STACK3)) // lower
+                        .lineToSplineHeading(new Pose2d(coneStackX,coneStackY,Math.toRadians(coneStackH))) // to cone stack
+
+                        // grab cone
+                        .waitSeconds(0.1) // wait for robot to stop shaking
+                        .addTemporalMarker(() -> mechanism.closeClaw()) // close claw and grab cone
+                        .waitSeconds(0.3) // wait for claw to close
+
+                        // move to pole
+                        .addTemporalMarker(() -> mechanism.moveSlides(ScoringMechanism.slidePositions.LOW))
+                        .lineToSplineHeading(new Pose2d(backFromCSX,backFromCSY,Math.toRadians(backFromCSH)))
+                        .addTemporalMarker(() -> mechanism.moveSlides(ScoringMechanism.slidePositions.HIGH))
+                        .lineToSplineHeading(new Pose2d(poleX,poleY,Math.toRadians(poleH)))
+                        .waitSeconds(0.2) // wait for slides to stop shaking
+                        .addTemporalMarker(() -> mechanism.openClaw()) // drops cone on pole
+                        .waitSeconds(0.3) // wait for grabber to open
+
+                        // -----CYCLE 4-----
+                        // go to cone stack
+                        .lineToSplineHeading(new Pose2d(backFromPoleX,backFromPoleY,Math.toRadians(backFromPoleH))) // move back
+                        .addTemporalMarker(() -> mechanism.moveSlides(ScoringMechanism.slidePositions.STACK2)) // lower
+                        .lineToSplineHeading(new Pose2d(coneStackX,coneStackY,Math.toRadians(coneStackH))) // to cone stack
+
+                        // grab cone
+                        .waitSeconds(0.1) // wait for robot to stop shaking
+                        .addTemporalMarker(() -> mechanism.closeClaw()) // close claw and grab cone
+                        .waitSeconds(0.3) // wait for claw to close
+
+                        // move to pole
+                        .addTemporalMarker(() -> mechanism.moveSlides(ScoringMechanism.slidePositions.LOW))
+                        .lineToSplineHeading(new Pose2d(backFromCSX,backFromCSY,Math.toRadians(backFromCSH)))
+                        .addTemporalMarker(() -> mechanism.moveSlides(ScoringMechanism.slidePositions.HIGH))
+                        .lineToSplineHeading(new Pose2d(poleX,poleY,Math.toRadians(poleH)))
+                        .waitSeconds(0.2) // wait for slides to stop shaking
+                        .addTemporalMarker(() -> mechanism.openClaw()) // drops cone on pole
+                        .waitSeconds(0.3) // wait for grabber to open
+
+                        .lineToSplineHeading(new Pose2d(45,0,Math.toRadians(0))) // to center area
+                        .addTemporalMarker(() -> mechanism.moveSlides(ScoringMechanism.slidePositions.FLOOR)) // lower
+
+                        .build();
+            case THREE:
+                return drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
+                        .addTemporalMarker(() -> mechanism.moveSlides(ScoringMechanism.slidePositions.STACK2)) // raise cone a little
+
+                        // go to pole and place cone
+                        .lineToSplineHeading(new Pose2d(45,0,Math.toRadians(0))) // to center area
+                        .addTemporalMarker(() -> mechanism.moveSlides(ScoringMechanism.slidePositions.HIGH)) // raise high
+                        .lineToSplineHeading(new Pose2d(poleX,poleY,Math.toRadians(poleH)))
+                        .waitSeconds(0.3) // wait for slides to stop shaking
+                        .addTemporalMarker(() -> mechanism.openClaw()) // drops cone on pole
+                        .waitSeconds(0.2) // wait for grabber to open
+
+                        // -----CYCLE 1-----
+                        // go to cone stack
+                        .lineToSplineHeading(new Pose2d(backFromPoleX,backFromPoleY,Math.toRadians(backFromPoleH))) // move back
+                        .addTemporalMarker(() -> mechanism.moveSlides(ScoringMechanism.slidePositions.STACK5)) // lower
+                        .lineToSplineHeading(new Pose2d(coneStackX,coneStackY,Math.toRadians(coneStackH))) // to cone stack
+
+                        // grab cone
+                        .waitSeconds(0.1) // wait for robot to stop shaking
+                        .addTemporalMarker(() -> mechanism.closeClaw()) // close claw and grab cone
+                        .waitSeconds(0.3) // wait for claw to close
+
+                        // move to pole
+                        .addTemporalMarker(() -> mechanism.moveSlides(ScoringMechanism.slidePositions.LOW))
+                        .lineToSplineHeading(new Pose2d(backFromCSX,backFromCSY,Math.toRadians(backFromCSH)))
+                        .addTemporalMarker(() -> mechanism.moveSlides(ScoringMechanism.slidePositions.HIGH))
+                        .lineToSplineHeading(new Pose2d(poleX,poleY,Math.toRadians(poleH)))
+                        .waitSeconds(0.2) // wait for slides to stop shaking
+                        .addTemporalMarker(() -> mechanism.openClaw()) // drops cone on pole
+                        .waitSeconds(0.3) // wait for grabber to open
+
+                        // -----CYCLE 2-----
+                        // go to cone stack
+                        .lineToSplineHeading(new Pose2d(backFromPoleX,backFromPoleY,Math.toRadians(backFromPoleH))) // move back
+                        .addTemporalMarker(() -> mechanism.moveSlides(ScoringMechanism.slidePositions.STACK4)) // lower
+                        .lineToSplineHeading(new Pose2d(coneStackX,coneStackY,Math.toRadians(coneStackH))) // to cone stack
+
+                        // grab cone
+                        .waitSeconds(0.1) // wait for robot to stop shaking
+                        .addTemporalMarker(() -> mechanism.closeClaw()) // close claw and grab cone
+                        .waitSeconds(0.3) // wait for claw to close
+
+                        // move to pole
+                        .addTemporalMarker(() -> mechanism.moveSlides(ScoringMechanism.slidePositions.LOW))
+                        .lineToSplineHeading(new Pose2d(backFromCSX,backFromCSY,Math.toRadians(backFromCSH)))
+                        .addTemporalMarker(() -> mechanism.moveSlides(ScoringMechanism.slidePositions.HIGH))
+                        .lineToSplineHeading(new Pose2d(poleX,poleY,Math.toRadians(poleH)))
+                        .waitSeconds(0.2) // wait for slides to stop shaking
+                        .addTemporalMarker(() -> mechanism.openClaw()) // drops cone on pole
+                        .waitSeconds(0.3) // wait for grabber to open
+
+                        // -----CYCLE 3-----
+                        // go to cone stack
+                        .lineToSplineHeading(new Pose2d(backFromPoleX,backFromPoleY,Math.toRadians(backFromPoleH))) // move back
+                        .addTemporalMarker(() -> mechanism.moveSlides(ScoringMechanism.slidePositions.STACK3)) // lower
+                        .lineToSplineHeading(new Pose2d(coneStackX,coneStackY,Math.toRadians(coneStackH))) // to cone stack
+
+                        // grab cone
+                        .waitSeconds(0.1) // wait for robot to stop shaking
+                        .addTemporalMarker(() -> mechanism.closeClaw()) // close claw and grab cone
+                        .waitSeconds(0.3) // wait for claw to close
+
+                        // move to pole
+                        .addTemporalMarker(() -> mechanism.moveSlides(ScoringMechanism.slidePositions.LOW))
+                        .lineToSplineHeading(new Pose2d(backFromCSX,backFromCSY,Math.toRadians(backFromCSH)))
+                        .addTemporalMarker(() -> mechanism.moveSlides(ScoringMechanism.slidePositions.HIGH))
+                        .lineToSplineHeading(new Pose2d(poleX,poleY,Math.toRadians(poleH)))
+                        .waitSeconds(0.2) // wait for slides to stop shaking
+                        .addTemporalMarker(() -> mechanism.openClaw()) // drops cone on pole
+                        .waitSeconds(0.3) // wait for grabber to open
+
+                        // -----CYCLE 4-----
+                        // go to cone stack
+                        .lineToSplineHeading(new Pose2d(backFromPoleX,backFromPoleY,Math.toRadians(backFromPoleH))) // move back
+                        .addTemporalMarker(() -> mechanism.moveSlides(ScoringMechanism.slidePositions.STACK2)) // lower
+                        .lineToSplineHeading(new Pose2d(coneStackX,coneStackY,Math.toRadians(coneStackH))) // to cone stack
+
+                        // grab cone
+                        .waitSeconds(0.1) // wait for robot to stop shaking
+                        .addTemporalMarker(() -> mechanism.closeClaw()) // close claw and grab cone
+                        .waitSeconds(0.3) // wait for claw to close
+
+                        // move to pole
+                        .addTemporalMarker(() -> mechanism.moveSlides(ScoringMechanism.slidePositions.LOW))
+                        .lineToSplineHeading(new Pose2d(backFromCSX,backFromCSY,Math.toRadians(backFromCSH)))
+                        .addTemporalMarker(() -> mechanism.moveSlides(ScoringMechanism.slidePositions.HIGH))
+                        .lineToSplineHeading(new Pose2d(poleX,poleY,Math.toRadians(poleH)))
+                        .waitSeconds(0.2) // wait for slides to stop shaking
+                        .addTemporalMarker(() -> mechanism.openClaw()) // drops cone on pole
+                        .waitSeconds(0.3) // wait for grabber to open
+
+                        .lineToSplineHeading(new Pose2d(45,0,Math.toRadians(0))) // to center area
+                        .addTemporalMarker(() -> mechanism.moveSlides(ScoringMechanism.slidePositions.FLOOR)) // lower
+
+                        // move left to position 3
+                        .lineToSplineHeading(new Pose2d(45,-24,Math.toRadians(0)))
 
                         .build();
         }

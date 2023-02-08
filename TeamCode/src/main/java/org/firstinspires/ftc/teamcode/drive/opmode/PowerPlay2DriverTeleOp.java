@@ -64,7 +64,7 @@ public class PowerPlay2DriverTeleOp extends LinearOpMode { //---------------OPEN
 
     // Initializes the hardware.
     public void initHardware() {
-        mechanism.init(hardwareMap);
+        mechanism.init(hardwareMap, false);
 
         // Setup drive motors.
         motorFR = hardwareMap.get(DcMotor .class, "FR");
