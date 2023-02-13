@@ -97,6 +97,7 @@ public class ScoringMechanism {
         // set the slideLvl to be what the slides have just moved to
         prevHeight = newHeight;
     }
+
     public void update() {
 
     }

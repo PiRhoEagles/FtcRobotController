@@ -27,11 +27,10 @@ abstract class BaseAuto extends LinearOpMode {
         drive = new SampleMecanumDrive(hardwareMap);
         mechanism.init(hardwareMap, true);
 
-        mechanism.closeClaw();
-
         initCameraStuff();
         PowerPlayPipeline.detectionStates state = PowerPlayPipeline.detectionStates.ONE;
         while (!opModeIsActive() && !isStopRequested()) {
+            mechanism.closeClaw();
             state = pipeline.getState();
             telemetry.addData("Detected State", state);
             telemetry.update();
