@@ -11,6 +11,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
 import org.firstinspires.ftc.teamcode.drive.ScoringMechanism;
 
 import java.text.DecimalFormat;
@@ -18,6 +20,9 @@ import java.text.DecimalFormat;
 
 @TeleOp(name="Power Play 2 Driver TeleOp", group="Linear Opmode")
 public class PowerPlay2DriverTeleOp extends LinearOpMode { //---------------OPEN OPMODE---------------
+
+    private ElapsedTime timeSinceClosedGrabber = new ElapsedTime();
+    private boolean grabberWasRaisedAfterClosing = false;
 
     // Setup scoring mechanism.
     protected ScoringMechanism mechanism = new ScoringMechanism();
@@ -160,13 +165,18 @@ public class PowerPlay2DriverTeleOp extends LinearOpMode { //---------------OPEN
         // Rising edge detector for right bumper on gp2.
         if (currentGamepad2.right_bumper && !previousGamepad2.right_bumper) {
             mechanism.closeClaw();
-            sleep(250);
-            mechanism.moveSlides(STACK2);
+            timeSinceClosedGrabber.reset();
+            grabberWasRaisedAfterClosing = false;
         }
 
         // Rising edge detector for left bumper on gp2.
         if (currentGamepad2.left_bumper && !previousGamepad2.left_bumper) {
             mechanism.openClaw();
+        }
+
+        if (timeSinceClosedGrabber.milliseconds() > 250 && !grabberWasRaisedAfterClosing) {
+            mechanism.moveSlides(STACK2);
+            grabberWasRaisedAfterClosing = true;
         }
     }
 
