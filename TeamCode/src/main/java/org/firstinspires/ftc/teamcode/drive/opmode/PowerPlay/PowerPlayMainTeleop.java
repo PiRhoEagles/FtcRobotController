@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.drive.opmode.PowerPlay;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.RobotLog;
 
-@TeleOp(name="Power Play Main Teleop", group="Linear Opmode")
+@TeleOp(name="PP: 1 Driver TeleOp", group="Linear Opmode")
 //@Disabled
 public class PowerPlayMainTeleop extends LinearOpMode {
 

@@ -1,16 +1,19 @@
-package org.firstinspires.ftc.teamcode.drive.opmode;
+package org.firstinspires.ftc.teamcode.drive.opmode.PowerPlay;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.drive.ScoringMechanism;
+import org.firstinspires.ftc.teamcode.drive.opmode.PowerPlay.BaseAuto;
 import org.firstinspires.ftc.teamcode.pipelines.PowerPlayPipeline;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 @Config
 @Autonomous
-public class PowerPlayLefAuto extends BaseAuto{
+@Disabled
+public class PowerPlayLefAuto extends BaseAuto {
 
     @Override
     public TrajectorySequence trajectorySequenceBuilder(PowerPlayPipeline.detectionStates detectionState) {

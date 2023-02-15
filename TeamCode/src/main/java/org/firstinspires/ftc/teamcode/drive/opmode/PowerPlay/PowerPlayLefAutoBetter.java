@@ -1,16 +1,17 @@
-package org.firstinspires.ftc.teamcode.drive.opmode;
+package org.firstinspires.ftc.teamcode.drive.opmode.PowerPlay;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.drive.ScoringMechanism;
+import org.firstinspires.ftc.teamcode.drive.opmode.PowerPlay.BaseAuto;
 import org.firstinspires.ftc.teamcode.pipelines.PowerPlayPipeline;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 @Config
-@Autonomous
-public class PowerPlayLefAutoBetter extends BaseAuto{
+@Autonomous(name="PP: Left Auto", group="Power Play")
+public class PowerPlayLefAutoBetter extends BaseAuto {
 
     public static customPose2D poleFirst = new customPose2D(55, -7, -30);
     public static customPose2D backFromPole = new customPose2D(40, 0, 0);

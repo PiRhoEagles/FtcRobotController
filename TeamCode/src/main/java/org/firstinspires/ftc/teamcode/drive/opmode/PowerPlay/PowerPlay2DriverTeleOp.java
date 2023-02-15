@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.drive.opmode;
+package org.firstinspires.ftc.teamcode.drive.opmode.PowerPlay;
 
 import static org.firstinspires.ftc.teamcode.drive.ScoringMechanism.slidePositions.FLOOR;
 import static org.firstinspires.ftc.teamcode.drive.ScoringMechanism.slidePositions.LOW;
@@ -18,7 +18,7 @@ import org.firstinspires.ftc.teamcode.drive.ScoringMechanism;
 import java.text.DecimalFormat;
 
 
-@TeleOp(name="Power Play 2 Driver TeleOp", group="Linear Opmode")
+@TeleOp(name="PP: 2 Driver TeleOp", group="Power Play")
 public class PowerPlay2DriverTeleOp extends LinearOpMode { //---------------OPEN OPMODE---------------
 
     private ElapsedTime timeSinceClosedGrabber = new ElapsedTime();
