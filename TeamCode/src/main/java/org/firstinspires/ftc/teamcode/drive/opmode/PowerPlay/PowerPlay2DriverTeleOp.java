@@ -22,7 +22,7 @@ import java.text.DecimalFormat;
 public class PowerPlay2DriverTeleOp extends LinearOpMode { //---------------OPEN OPMODE---------------
 
     private ElapsedTime timeSinceClosedGrabber = new ElapsedTime();
-    private boolean grabberWasRaisedAfterClosing = false;
+    private boolean grabberWasRaisedAfterClosing = true;
 
     // Setup scoring mechanism.
     protected ScoringMechanism mechanism = new ScoringMechanism();
@@ -34,7 +34,7 @@ public class PowerPlay2DriverTeleOp extends LinearOpMode { //---------------OPEN
     private DcMotor motorBR = null;
 
     // The power of the motors are multiplied by this.
-    double motorPowerFactor = 0.8;
+    double motorPowerFactor = 1.0;
 
     // Decimal format that rounds to one decimal place.
     DecimalFormat df = new DecimalFormat("#.#");

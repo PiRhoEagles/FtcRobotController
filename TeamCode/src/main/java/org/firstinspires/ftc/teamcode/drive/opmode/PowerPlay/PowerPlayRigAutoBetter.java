@@ -19,7 +19,7 @@ public class PowerPlayRigAutoBetter extends BaseAuto {
     public static customPose2D backFromCS = new customPose2D(50, 0, -82);
     public static customPose2D facePole = new customPose2D(50, 3, 45);
     public static customPose2D pole = new customPose2D(53, 5, 45);
-
+    
     @Override
     public TrajectorySequence trajectorySequenceBuilder(PowerPlayPipeline.detectionStates detectionState) {
         switch (detectionState) {
